@@ -28,52 +28,79 @@ module powerbi.extensibility.visual {
     import valueFormatter = powerbi.extensibility.utils.formatting.valueFormatter;
 
     export module DataViewObjects {
-        /** Gets the value of the given object/property pair. */
-        export function getValue<T>(objects: DataViewObjects,
-                                    propertyId: DataViewObjectPropertyIdentifier, defaultValue?: T): T {
+
+        /**
+         * Gets the value of the given object/property pair.
+         * @param {DataViewObjects} objects           - List of category objects.
+         * @param {DataViewObjectPropertyIdentifier} propertyId     - Variable to store property id of category objects
+         * @param {T} defaultValue                    - Variable that stores the default value of object
+         */
+        export function getValue<T>(
+            objects: DataViewObjects,
+            propertyId: DataViewObjectPropertyIdentifier,
+            defaultValue?: T): T {
             if (!objects) {
                 return defaultValue;
             }
             const objectOrMap: DataViewObject = objects[propertyId.objectName];
             const object: DataViewObject = objectOrMap as DataViewObject;
-
             return DataViewObject.getValue(object, propertyId.propertyName, defaultValue);
         }
 
-        /** Gets an object from objects. */
-        export function getObject(objects: DataViewObjects,
-                                  objectName: string, defaultValue?: DataViewObject): DataViewObject {
+        /**
+         * Gets an object from objects.
+         * @param {DataViewObjects} objects           - List of category objects.
+         * @param {string} objectName                 - Variable to store object name
+         * @param {DataViewObject} defaultValue       - Variable that stores default value of object
+         */
+        export function getObject(
+            objects: DataViewObjects,
+            objectName: string,
+            defaultValue?: DataViewObject): DataViewObject {
             if (objects && objects[objectName]) {
-                const object: DataViewObject = objects[objectName] as DataViewObject;
-
-                return object;
+                return objects[objectName];
             } else {
                 return defaultValue;
             }
         }
 
-        /** Gets a map of user-defined objects. */
+        /**
+         * Gets a map of user-defined objects.
+         * @param {DataViewObjects} objects           - List of category objects.
+         * @param {string} objectName                 - Variable to store object name
+         */
         export function getUserDefinedObjects(objects: DataViewObjects, objectName: string): DataViewObjectMap {
             if (objects && objects[objectName]) {
-                const map: DataViewObjectMap = objects[objectName] as DataViewObjectMap;
-
-                return map;
+                return objects[objectName] as DataViewObjectMap;
             }
         }
 
-        /** Gets the solid color from a fill property. */
-        export function getFillColor(objects: DataViewObjects, propertyId: DataViewObjectPropertyIdentifier,
-                                     defaultColor?: string): string {
+        /**
+         * Gets the solid color from a fill property.
+         * @param {DataViewObjects} objects           - List of category objects.
+         * @param {DataViewObjectPropertyIdentifier} propertyId     - Variable to store property id of category objects
+         * @param {string} defaultColor               - Variable to store the default color value
+         */
+        export function getFillColor(
+            objects: DataViewObjects,
+            propertyId: DataViewObjectPropertyIdentifier,
+            defaultColor?: string): string {
             const value: Fill = getValue(objects, propertyId);
             if (!value || !value.solid) {
                 return defaultColor;
             }
-
             return value.solid.color;
         }
     }
 
     export module DataViewObject {
+
+        /**
+         * Method that sets the value property
+         * @param {DataViewObject} object               - Category object
+         * @param {string} propertyName                 - Variable to store the property name for the object
+         * @param {T} defaultValue                      - Variable that stores the default value of object
+         */
         export function getValue<T>(object: DataViewObject, propertyName: string, defaultValue?: T): T {
             if (!object) {
                 return defaultValue;
@@ -82,18 +109,23 @@ module powerbi.extensibility.visual {
             if (propertyValue === undefined) {
                 return defaultValue;
             }
-
             return propertyValue;
         }
 
-        /** Gets the solid color from a fill property using only a propertyName */
-        export function getFillColorByPropertyName(objects: DataViewObjects,
-                                                   propertyName: string, defaultColor?: string): string {
+        /**
+         * Gets the solid color from a fill property using only a propertyName
+         * @param {DataViewObjects} objects       - List of category objects.
+         * @param {string} propertyName           - Variable to store the property name for the object
+         * @param {string} defaultColor           - Variable to store the default color value
+         */
+        export function getFillColorByPropertyName(
+            objects: DataViewObjects,
+            propertyName: string,
+            defaultColor?: string): string {
             const value: Fill = DataViewObject.getValue(objects, propertyName);
             if (!value || !value.solid) {
                 return defaultColor;
             }
-
             return value.solid.color;
         }
     }
@@ -125,13 +157,13 @@ module powerbi.extensibility.visual {
         textShadowBlur: string;
         textShadowColor: string;
         fontWeight: string;
-        backgroundcolor: string;
+        backgroundColor: string;
         transparency: number;
         fontFamily: string;
         boldStyle: boolean;
         underline: boolean;
         overline: boolean;
-        strikethrough: boolean;
+        strikeThrough: boolean;
         italicStyle: boolean;
         postText: string;
     }
@@ -142,7 +174,7 @@ module powerbi.extensibility.visual {
     }
 
     export interface IDynamicTextSettings {
-        backgroundcolor: string;
+        backgroundColor: string;
         transparency: number;
         textDecoration: string;
         textTransform: string;
@@ -154,9 +186,10 @@ module powerbi.extensibility.visual {
         boldStyle: boolean;
         underline: boolean;
         overline: boolean;
-        strikethrough: boolean;
+        strikeThrough: boolean;
         italicStyle: boolean;
     }
+
     export let questTextProperties: {
         textSettings: {
             color: DataViewObjectPropertyIdentifier;
@@ -185,7 +218,7 @@ module powerbi.extensibility.visual {
             textShadowBlur: DataViewObjectPropertyIdentifier;
             textShadowColor: DataViewObjectPropertyIdentifier;
             fontWeight: DataViewObjectPropertyIdentifier;
-            backgroundcolor: DataViewObjectPropertyIdentifier;
+            backgroundColor: DataViewObjectPropertyIdentifier;
             transparency: DataViewObjectPropertyIdentifier;
             postText: DataViewObjectPropertyIdentifier;
             fontFamily: DataViewObjectPropertyIdentifier;
@@ -193,10 +226,10 @@ module powerbi.extensibility.visual {
             italicStyle: DataViewObjectPropertyIdentifier;
             underline: DataViewObjectPropertyIdentifier;
             overline: DataViewObjectPropertyIdentifier;
-            strikethrough: DataViewObjectPropertyIdentifier;
+            strikeThrough: DataViewObjectPropertyIdentifier;
         };
         dynamicSettings: {
-            backgroundcolor: DataViewObjectPropertyIdentifier;
+            backgroundColor: DataViewObjectPropertyIdentifier;
             transparency: DataViewObjectPropertyIdentifier;
             textDecoration: DataViewObjectPropertyIdentifier;
             textTransform: DataViewObjectPropertyIdentifier;
@@ -209,36 +242,43 @@ module powerbi.extensibility.visual {
             italicStyle: DataViewObjectPropertyIdentifier;
             underline: DataViewObjectPropertyIdentifier;
             overline: DataViewObjectPropertyIdentifier;
-            strikethrough: DataViewObjectPropertyIdentifier;
+            strikeThrough: DataViewObjectPropertyIdentifier;
         }
     };
 
     questTextProperties = {
         dynamicSettings: {
-            backgroundcolor: { objectName: "Settings",
-            propertyName: "backgroundcolor" } as DataViewObjectPropertyIdentifier,
+            backgroundColor: { objectName: "Settings" } as DataViewObjectPropertyIdentifier,
             boldStyle: { objectName: "Settings", propertyName: "boldStyle" } as DataViewObjectPropertyIdentifier,
             fontFamily: { objectName: "Settings", propertyName: "fontFamily" } as DataViewObjectPropertyIdentifier,
             fontWeight: { objectName: "Settings", propertyName: "fontWeight" } as DataViewObjectPropertyIdentifier,
             italicStyle: { objectName: "Settings", propertyName: "italicStyle" } as DataViewObjectPropertyIdentifier,
             overline: { objectName: "Settings", propertyName: "overline" } as DataViewObjectPropertyIdentifier,
-            strikethrough: { objectName: "Settings",
-            propertyName: "strikethrough" } as DataViewObjectPropertyIdentifier,
-            textDecoration: { objectName: "Settings",
-            propertyName: "textDecoration" } as DataViewObjectPropertyIdentifier,
+            strikeThrough: {
+                objectName: "Settings",
+                propertyName: "strikeThrough" } as DataViewObjectPropertyIdentifier,
+            textDecoration: {
+                objectName: "Settings",
+                propertyName: "textDecoration" } as DataViewObjectPropertyIdentifier,
             textShadow: { objectName: "Settings", propertyName: "textShadow" } as DataViewObjectPropertyIdentifier,
-            textShadowBlur: { objectName: "Settings",
-            propertyName: "textShadowBlur" } as DataViewObjectPropertyIdentifier,
-            textShadowColor: { objectName: "Settings",
-            propertyName: "textShadowColor" } as DataViewObjectPropertyIdentifier,
-            textTransform: { objectName: "Settings",
-            propertyName: "textTransform" } as DataViewObjectPropertyIdentifier,
+            textShadowBlur: {
+                objectName: "Settings",
+                propertyName: "textShadowBlur" } as DataViewObjectPropertyIdentifier,
+            textShadowColor: {
+                objectName: "Settings",
+                propertyName: "textShadowColor" } as DataViewObjectPropertyIdentifier,
+            textTransform: {
+                objectName: "Settings",
+                propertyName: "textTransform" } as DataViewObjectPropertyIdentifier,
             transparency: { objectName: "Settings", propertyName: "transparency" } as DataViewObjectPropertyIdentifier,
-            underline: { objectName: "Settings", propertyName: "underline" } as DataViewObjectPropertyIdentifier
-        },
+            underline: {
+                objectName: "Settings",
+                propertyName: "underline" } as DataViewObjectPropertyIdentifier },
+
         staticTextSettings: {
-            backgroundcolor: { objectName: "staticText",
-            propertyName: "backgroundcolor" } as DataViewObjectPropertyIdentifier,
+            backgroundColor: {
+                objectName: "staticText",
+                propertyName: "backgroundColor" } as DataViewObjectPropertyIdentifier,
             boldStyle: { objectName: "staticText", propertyName: "boldStyle" } as DataViewObjectPropertyIdentifier,
             fontFamily: { objectName: "staticText", propertyName: "fontFamily" } as DataViewObjectPropertyIdentifier,
             fontWeight: { objectName: "staticText", propertyName: "fontWeight" } as DataViewObjectPropertyIdentifier,
@@ -246,185 +286,238 @@ module powerbi.extensibility.visual {
             overline: { objectName: "staticText", propertyName: "overline" } as DataViewObjectPropertyIdentifier,
             postText: { objectName: "staticText", propertyName: "postText" } as DataViewObjectPropertyIdentifier,
             showColon: { objectName: "staticText", propertyName: "showColon" } as DataViewObjectPropertyIdentifier,
-            strikethrough: { objectName: "staticText",
-            propertyName: "strikethrough" } as DataViewObjectPropertyIdentifier,
-            textDecoration: { objectName: "staticText",
-            propertyName: "textDecoration" } as DataViewObjectPropertyIdentifier,
-            textPosition: { objectName: "staticText",
-            propertyName: "textPosition" } as DataViewObjectPropertyIdentifier,
+            strikeThrough: {
+                objectName: "staticText",
+                propertyName: "strikeThrough" } as DataViewObjectPropertyIdentifier,
+            textDecoration: {
+                objectName: "staticText",
+                propertyName: "textDecoration" } as DataViewObjectPropertyIdentifier,
+            textPosition: {
+                objectName: "staticText",
+                propertyName: "textPosition" } as DataViewObjectPropertyIdentifier,
             textShadow: { objectName: "staticText", propertyName: "textShadow" } as DataViewObjectPropertyIdentifier,
-            textShadowBlur: { objectName: "staticText",
-            propertyName: "textShadowBlur" } as DataViewObjectPropertyIdentifier,
-            textShadowColor: { objectName: "staticText",
-            propertyName: "textShadowColor" } as DataViewObjectPropertyIdentifier,
-            textTransform: { objectName: "staticText",
-            propertyName: "textTransform" } as DataViewObjectPropertyIdentifier,
-            transparency: { objectName: "staticText",
-            propertyName: "transparency" } as DataViewObjectPropertyIdentifier,
-            underline: { objectName: "staticText", propertyName: "underline" } as DataViewObjectPropertyIdentifier
-        },
+            textShadowBlur: {
+                objectName: "staticText",
+                propertyName: "textShadowBlur" } as DataViewObjectPropertyIdentifier,
+            textShadowColor: {
+                objectName: "staticText",
+                propertyName: "textShadowColor" } as DataViewObjectPropertyIdentifier,
+            textTransform: {
+                objectName: "staticText",
+                propertyName: "textTransform" } as DataViewObjectPropertyIdentifier,
+            transparency: {
+                objectName: "staticText",
+                propertyName: "transparency" } as DataViewObjectPropertyIdentifier,
+            underline: { objectName: "staticText", propertyName: "underline" } as DataViewObjectPropertyIdentifier },
         textSettings: {
             alignment: { objectName: "textSettings", propertyName: "alignment" } as DataViewObjectPropertyIdentifier,
             alignmentV: { objectName: "textSettings", propertyName: "alignmentV" } as DataViewObjectPropertyIdentifier,
             color: { objectName: "textSettings", propertyName: "color" } as DataViewObjectPropertyIdentifier,
             direction: { objectName: "textSettings", propertyName: "direction" } as DataViewObjectPropertyIdentifier,
             fontSize: { objectName: "textSettings", propertyName: "fontSize" } as DataViewObjectPropertyIdentifier,
-            letterSpacing: { objectName: "textSettings",
-            propertyName: "letterSpacing" } as DataViewObjectPropertyIdentifier,
+            letterSpacing: {
+                objectName: "textSettings", propertyName: "letterSpacing" } as DataViewObjectPropertyIdentifier,
             lineHeight: { objectName: "textSettings", propertyName: "lineHeight" } as DataViewObjectPropertyIdentifier,
             lineIndent: { objectName: "textSettings", propertyName: "lineIndent" } as DataViewObjectPropertyIdentifier,
-            perspective: { objectName: "textSettings",
-            propertyName: "perspective" } as DataViewObjectPropertyIdentifier,
+            perspective: {
+                objectName: "textSettings",
+                propertyName: "perspective" } as DataViewObjectPropertyIdentifier,
             postText: { objectName: "textSettings", propertyName: "postText" } as DataViewObjectPropertyIdentifier,
             skewX: { objectName: "textSettings", propertyName: "skewX" } as DataViewObjectPropertyIdentifier,
             skewY: { objectName: "textSettings", propertyName: "skewY" } as DataViewObjectPropertyIdentifier,
             textIndent: { objectName: "textSettings", propertyName: "textIndent" } as DataViewObjectPropertyIdentifier,
-            textRotate: { objectName: "textSettings", propertyName: "textRotate" } as DataViewObjectPropertyIdentifier,
-            transparency: { objectName: "textSettings",
-            propertyName: "transparency" } as DataViewObjectPropertyIdentifier,
-            wordSpacing: { objectName: "textSettings", propertyName: "wordSpacing" }as DataViewObjectPropertyIdentifier
-        },
+            textRotate: {
+                objectName: "textSettings",
+                propertyName: "textRotate" } as DataViewObjectPropertyIdentifier,
+            transparency: {
+                objectName: "textSettings",
+                propertyName: "transparency" } as DataViewObjectPropertyIdentifier,
+            wordSpacing: {
+                objectName: "textSettings",
+                propertyName: "wordSpacing" } as DataViewObjectPropertyIdentifier },
     };
 
     export class TextEnhancer implements IVisual {
-        private eventService: IVisualEventService ;
+        private eventService: IVisualEventService;
         private target: d3.Selection<HTMLElement>;
         private dataViews: DataView;
         private staticTextSettings: IStaticTextSettings;
         private dynamicSettings: IDynamicTextSettings;
         private finalTextContainer: d3.Selection<HTMLElement>;
         private visualHost: IVisualHost;
+        private transformed: string = "";
+        private paddingType: string = "";
+        private positionName: string = "";
+        private positionVal: string = "";
+        private degree360: number = 360;
+        private degree180: number = 180;
+        private degree90: number = 90;
+        private degree270: number = 270;
         constructor(options: VisualConstructorOptions) {
             this.visualHost = options.host;
             this.eventService = options.host.eventService;
             this.target = d3.select(options.element);
             this.target.style({
-                cursor: "default"
-            });
+                "cursor": "default",
+                "overflow-y": "auto" });
         }
 
+        /**
+         * Method to change point to pixel
+         * @param {number} pt        - variable to store points
+         */
         public pointToPixel(pt: number): string {
             const pxPtRatio: number = 4 / 3;
             const pixelString: string = "px";
-
             return (pt * pxPtRatio) + pixelString;
         }
 
+        /**
+         * Method that sets spacing
+         * @param {number} ls         - variable to set spacing
+         */
         public letSpace(ls: number): string {
+            const lower = -3;
+            const upper = 50;
+            ls = ls < lower ? lower : ls > upper ? upper : ls;
             const pixelString: string = "px";
-
             return ls + pixelString;
         }
 
+        /**
+         * Method that gets Line height
+         * @param {number} lh        - variable that stores line height
+         */
         public getLineHeight(lh: number): string {
-            lh = lh == null ? 1.5 : lh;
+            const defaultHeight = 1.6;
+            lh = lh === (null || 0) ? defaultHeight : lh;
             const pixelString: string = "";
-
             return lh + pixelString;
         }
 
+        /**
+         * Method that sets word spacing
+         * @param {number} ws        - variable that stores spacing between words
+         */
         public getWordSpace(ws: number): string {
+            const lower = -3;
+            const upper = 50;
+            ws = ws === null ? 0 : (ws < lower ? lower : ws > upper ? upper : ws);
             const pixelString: string = "px";
-
             return ws + pixelString;
         }
 
-        public getTextIndent(ti: number): string {
-            ti = ti == null ? 0 : ti;
+        /**
+         * Method that sets the Lines indent
+         * @param {number} ti        - variable that stores line indent
+         */
+        public getIndent(ti: number): string {
+            const lower = -3;
+            ti = ti == null ? 0 : (ti < lower ? lower : ti);
             const pixelString: string = "px";
-
             return ti + pixelString;
         }
 
-        public getLineIndent(ti: number): string {
-            ti = ti == null ? 0 : ti;
-            const pixelString: string = "px";
-
-            return ti + pixelString;
-        }
-
+        /**
+         * Method that sets the Text shadow
+         * @param {string} position      - variable that stores position of text
+         * @param {string} blur          - variable to set the blur effect
+         * @param {string} color         - variable that stores the color
+         */
         public getTextShadow(position: string, blur: string, color: string): string {
-            let a: number = 0;
-            let b: number = 0;
-            let c: number = 0;
+            let aShadowVar: number = 0;
+            let bShadowVar: number = 0;
+            let cShadowVar: number = 0;
             switch (position) {
                 case "none":
                     return "";
-                case "topleft":
-                    a = -2;
-                    b = -2;
+                case "topLeft":
+                    aShadowVar = -2;
+                    bShadowVar = -2;
                     break;
-                case "topcenter":
-                    a = 0;
-                    b = -2;
+                case "topCenter":
+                    aShadowVar = 0;
+                    bShadowVar = -2;
                     break;
-                case "topright":
-                    a = 2;
-                    b = -2;
+                case "topRight":
+                    aShadowVar = 2;
+                    bShadowVar = -2;
                     break;
-                case "middleleft":
-                    a = -2;
-                    b = 0;
+                case "middleLeft":
+                    aShadowVar = -2;
+                    bShadowVar = 0;
                     break;
-                case "middlecenter":
-                    a = 0;
-                    b = 0;
+                case "middleCenter":
+                    aShadowVar = 0;
+                    bShadowVar = 0;
                     break;
-                case "middleright":
-                    a = 2;
-                    b = 0;
+                case "middleRight":
+                    aShadowVar = 2;
+                    bShadowVar = 0;
                     break;
-                case "bottomleft":
-                    a = -2;
-                    b = 2;
+                case "bottomLeft":
+                    aShadowVar = -2;
+                    bShadowVar = 2;
                     break;
-                case "bottomcenter":
-                    a = 0;
-                    b = 2;
+                case "bottomCenter":
+                    aShadowVar = 0;
+                    bShadowVar = 2;
                     break;
-                case "bottomright":
-                    a = 2;
-                    b = 2;
+                case "bottomRight":
+                    aShadowVar = 2;
+                    bShadowVar = 2;
                     break;
-                default : break;
+                default: break;
             }
             switch (blur) {
                 case "low":
-                    c = 2;
+                    cShadowVar = 2;
                     break;
                 case "medium":
-                    c = 8;
+                    cShadowVar = 8;
                     break;
                 case "high":
-                    c = 14;
+                    cShadowVar = 14;
                     break;
                 default: break;
             }
             const pixelString: string = "px";
-
-            return `${a}${pixelString} ${b}${pixelString} ${c}${pixelString} ${color}`;
+            return `${aShadowVar}${pixelString} ${bShadowVar}${pixelString} ${cShadowVar}${pixelString} ${color}`;
         }
 
+        /**
+         * Method that returns perspective of the text
+         * @param {number} fw        - variable that stores the perspective of the text
+         */
         public getPerspective(fw: number): string {
             const pixelString: string = "px";
-
             return fw + pixelString;
         }
 
+        /**
+         * Method that returns skew text
+         * @param {number} sk        - variable that stores the skewness value of the text
+         */
         public getSkew(sk: number): string {
-            sk = sk == null ? 0 : sk;
+            sk = sk === null ? 0 : (sk > this.degree360) ? this.degree360 : sk < 0 ? 0 : sk;
             const pixelString: string = "deg";
 
             return sk + pixelString;
         }
 
+        /**
+         * Method that returns skewed strings
+         * @param {number} sx        - variable that stores the value for the x-axis skewness parameter
+         * @param {number} sy        - variable that stores the value for the y-axis skewness parameter
+         */
         public getSkewString(sx: number, sy: number): string {
-            const skewString: string = `skewX(${this.getSkew(sx)}) skewY(${this.getSkew(sy)} )`;
-
-            return skewString;
+            return `skewX(${this.getSkew(sx)}) skewY(${this.getSkew(sy)} )`;
         }
 
-        // tslint:disable-next-line:no-any
+        /**
+         * Method that counts Decimal places
+         * @param {any} value         - variable to store the number of decimal places
+         */
         public getDecimalPlacesCount(value: any): number {
             let decimalPlaces: number = 0;
             if (value > 0) {
@@ -433,58 +526,67 @@ module powerbi.extensibility.visual {
                     decimalPlaces = arr[1].length;
                 }
             }
-
             return decimalPlaces;
         }
 
+        /**
+         * Method to get dynamic text
+         * @param {DataView} dataView          - the dataview object, which contains
+         *                                      all data needed to render the visual.
+         */
         public getDynamicTextValue(dataView: DataView): IDynamicTextContainer {
-            // tslint:disable-next-line:no-any
             let textValDynamicInput: any;
             let valueLength: number = 0;
-            if (dataView && dataView.categorical) {
-                if (dataView.categorical.categories && dataView.categorical.categories[0] &&
-                    dataView.categorical.categories[0].values) {
-                    valueLength = dataView.categorical.categories[0].values.length;
-                    textValDynamicInput = valueLength ? dataView.categorical.categories[0].values[0] : "(blank)";
-                    if (dataView.categorical.categories[0].source && dataView.categorical.categories[0].source.format) {
+            const categorical = dataView.categorical;
+            if (dataView && categorical) {
+                if (categorical.categories && categorical.categories[0] &&
+                    categorical.categories[0].values) {
+                    valueLength = categorical.categories[0].values.length;
+                    textValDynamicInput = valueLength ? categorical.categories[0].values[0] : "(blank)";
+                    if (categorical.categories[0].source && categorical.categories[0].source.format) {
                         const formatter: utils.formatting.IValueFormatter = valueFormatter.create({
-                            format: dataView.categorical.categories[0].source.format
-                        });
+                            format: categorical.categories[0].source.format });
                         textValDynamicInput = formatter.format(textValDynamicInput);
                     }
-                } else if (dataView.categorical.values && dataView.categorical.values[0] &&
-                    dataView.categorical.values[0].values) {
-                    valueLength = dataView.categorical.values[0].values.length;
-                    textValDynamicInput = dataView.categorical.values[0].values[0] ?
-                    dataView.categorical.values[0].values[0] : 0;
-                    if (dataView.categorical.values[0] && dataView.categorical.values[0].source
-                        && dataView.categorical.values[0].source.format) {
+                } else if (categorical.values && categorical.values[0] &&
+                    categorical.values[0].values) {
+                    valueLength = categorical.values[0].values.length;
+                    textValDynamicInput = categorical.values[0].values[0] ?
+                        categorical.values[0].values[0] : 0;
+                    const upper = 4;
+                    if (categorical.values[0] && categorical.values[0].source
+                        && categorical.values[0].source.format) {
                         let decimalPlaces: number = this.getDecimalPlacesCount(textValDynamicInput);
-                        decimalPlaces = decimalPlaces > 4 ? 4 : decimalPlaces;
+                        decimalPlaces = decimalPlaces > upper ? upper : decimalPlaces;
                         const formatter: utils.formatting.IValueFormatter = valueFormatter.create({
-                            format: dataView.categorical.values[0].source.format, precision: decimalPlaces, value: 1
-                        });
+                            format: categorical.values[0].source.format, precision: decimalPlaces, value: 1 });
                         textValDynamicInput = formatter.format(textValDynamicInput);
                     }
                 }
-                const obj: IDynamicTextContainer = {
+                return {
                     lengthContainer: valueLength,
-                    textContainer: textValDynamicInput
-                };
-
-                return obj;
+                    textContainer: textValDynamicInput };
             }
         }
 
+        /**
+         * Method to get Font style
+         * @param {IDynamicTextSettings | IStaticTextSettings} settings      - variable that stores the
+         *                                      different configurations that are available on the text
+         */
         public getFontStyleClassName(settings: IDynamicTextSettings | IStaticTextSettings): string {
             let fontStyleClassName: string = "";
             if (settings.italicStyle) {
                 fontStyleClassName = "tw_italic";
             }
-
             return fontStyleClassName;
         }
 
+        /**
+         * Method to get Text decoration
+         * @param {IDynamicTextSettings | IStaticTextSettings} settings      - variable that stores the
+         *                                      different configurations that are available on the text
+         */
         public getTextDecoration(settings: IDynamicTextSettings | IStaticTextSettings): string {
             let textDecorationName: string = "";
             if (settings.underline) {
@@ -493,37 +595,55 @@ module powerbi.extensibility.visual {
             if (settings.overline) {
                 textDecorationName += "overline ";
             }
-            if (settings.strikethrough) {
+            if (settings.strikeThrough) {
                 textDecorationName += "line-through ";
             }
-
             return textDecorationName;
         }
 
+        /**
+         * Method to convert Hex to rgb
+         * @param {string} hex               - Variable that stores any hexadecimals
+         */
         public convertHex(hex: string): string {
             hex = hex.replace("#", "");
-            const r: number = parseInt(hex.substring(0, 2), 16);
-            const g: number = parseInt(hex.substring(2, 4), 16);
-            const b: number = parseInt(hex.substring(4, 6), 16);
-            const result: string = `rgb(${r},${g},${b})`;
-
-            return result;
+            const rHexString: number = parseInt(hex.substring(0, 2), 16);
+            const gHexString: number = parseInt(hex.substring(2, 4), 16);
+            const bHexString: number = parseInt(hex.substring(4, 6), 16);
+            return `rgb(${rHexString},${gHexString},${bHexString})`;
         }
 
+        /**
+         * Method to get the opacity value
+         * @param {number} transparency      -  variable that stores the opacity value of the text
+         */
         public getOpacityHex(transparency: number): string {
-            transparency = (100 - transparency);
-            if (transparency === 100) {
+            const upper = 100;
+            const max = 255;
+            const lower = 6;
+            const limit = 16;
+            transparency = (upper - transparency);
+            if (transparency === upper) {
                 return "";
             } else {
-                return transparency <= 6 ? `0${Math.round((transparency / 100) * 255).toString(16).toUpperCase()}` :
-                Math.round((transparency / 100) *  255).toString(16).toUpperCase();
+                return transparency <= lower ? `0${Math.round((transparency / upper) * max).toString(limit).toUpperCase()}` :
+                    Math.round((transparency / upper) * max).toString(limit).toUpperCase();
             }
         }
 
+        /**
+         * Method to convert into radians
+         * @param {number} angle             - variable that stores the angle value that will be converted
+         */
         public toRadians(angle: number): number {
-            return angle * (Math.PI / 180);
+            return angle * (Math.PI / this.degree180);
         }
 
+        /**
+         * Method that returns Font weight
+         * @param {IDynamicTextSettings | IStaticTextSettings} settings          - variable that stores the
+         *                                          different configurations that are available on the text
+         */
         public getFontWeight(settings: IDynamicTextSettings | IStaticTextSettings): string {
             if (settings.boldStyle) {
                 return "bold";
@@ -532,938 +652,349 @@ module powerbi.extensibility.visual {
             }
         }
 
+        /**
+         * Method that returns Text Transform
+         * @param {IDynamicTextSettings | IStaticTextSettings} settings          - variable that stores the
+         *                                          different configurations that are available on the text
+         */
         public getTextTransform(settings: IDynamicTextSettings | IStaticTextSettings): string {
             return settings.textTransform;
         }
 
-        public update(options: VisualUpdateOptions): void {
-            try {
-            this.eventService.renderingStarted(options);
-            const textDynamic = (".dynamicText");
-            this.target.selectAll(".tw_value").remove();
-            const dataView: DataView = this.dataViews = options.dataViews[0];
-            let valueLength: number = 0;
-            const textSettings: ITextSettings = this.getTextSettings(dataView);
-            this.dynamicSettings = this.getDynamicTextSettings(dataView);
-            this.staticTextSettings = this.getStaticTextSettings(dataView);
-            let textValDynamicInput: string;
-            let textValStaticInput: string;
-            textValStaticInput = this.staticTextSettings.postText;
-            this.staticTextSettings.postText = textValStaticInput;
-            const valuesContainer: IDynamicTextContainer = this.getDynamicTextValue(dataView);
-            textValDynamicInput = valuesContainer.textContainer;
-            const textFontSize: number = textSettings.fontSize;
-            const letSpacing: number = textSettings.letterSpacing;
-            const wordSpace: number = textSettings.wordSpacing;
-            const lHeight: number = textSettings.lineHeight;
-            const pers: number = textSettings.perspective > 0 ? 100 - textSettings.perspective + 1 : 0;
-            const inden: number = textSettings.textIndent;
-            let textRotationVal: number = textSettings.textRotate == null ? 0 : textSettings.textRotate;
-            const textTrans: string = this.getTextTransform(this.staticTextSettings);
-            const textTransD: string = this.getTextTransform(this.dynamicSettings);
-            const dynamictextFontFamily: string = this.dynamicSettings.fontFamily;
-            const staticTextFontFamily: string = this.staticTextSettings.fontFamily;
-            const dynfontStyleClass: string = this.getFontStyleClassName(this.dynamicSettings);
-            const staticfontStyleClass: string = this.getFontStyleClassName(this.staticTextSettings);
-            const statictextDecoration: string = this.getTextDecoration(this.staticTextSettings);
-            const dyntextDecoration: string = this.getTextDecoration(this.dynamicSettings);
-            const statictextShadow: string = this.getStaticTextSettings(dataView).textShadow;
-            const statictextShadowBlur: string = this.getStaticTextSettings(dataView).textShadowBlur;
-            const statictextShadowColor: string = this.getStaticTextSettings(dataView).textShadowColor;
-            const dyntextShadow: string = this.getDynamicTextSettings(dataView).textShadow;
-            const dyntextShadowBlur: string = this.getDynamicTextSettings(dataView).textShadowBlur;
-            const dyntextShadowColor: string = this.getDynamicTextSettings(dataView).textShadowColor;
-            const staticfontwgt: string = this.getFontWeight(this.staticTextSettings);
-            const dynfontwgt: string = this.getFontWeight(this.dynamicSettings);
-            const textSkewX: number = textSettings.skewX;
-            const textSkewY: number = textSettings.skewY;
-            let textValStatic: string = "";
-            let textValDynamic: string = "";
-            valueLength = valuesContainer.lengthContainer;
-            // Text Formatting
-            if (valueLength === 1) {
-                const original: d3.Selection<HTMLElement> = this.target.append("div")
-                    .classed("tw_value tw_finalText", true)
-                    .style("font-size", this.pointToPixel(textFontSize))
-                    .style("letter-spacing", this.letSpace(letSpacing))
-                    .style("word-spacing", this.getWordSpace(wordSpace))
-                    .style("line-height", this.getLineHeight(lHeight))
-                    .style("text-indent", this.getTextIndent(inden))
-                    .style("color", textSettings.color +
-                        this.getOpacityHex(textSettings.transparency == null ? 0 : textSettings.transparency))
-                    .style("transform", this.getSkewString(textSkewX, textSkewY))
-                    .style("width", "fit-content");
+        /**
+         * Method to set top values for text
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         * @param {number} translate1               - first transformed text
+         * @param {number} translate2               - second transformed text
+         * @param {string} padding1                 - padding when line indent is greater than zero
+         * @param {string} padding2                 - padding when line indent is not greater than zero
+         * @param {string} positionName             - variable to store the position name of the text
+         * @param {number} positionVal              - variable to store the position value of the text
+         */
+        public textSettingsTopValues(
+            textSettings: ITextSettings,
+            translate1: number,
+            translate2: number,
+            padding1: string,
+            padding2: string,
+            positionName: string,
+            positionVal: number): void {
+            const propVal: string = this.finalTextContainer.style("transform");
+            this.transformed = `${propVal} translate(` + translate1 + `%, ` + translate2 + `%)`;
+            this.paddingType = textSettings.lineIndent >= 0 ? padding1 : padding2;
+            this.positionName = positionName;
+            this.positionVal = positionVal + "%";
+        }
 
-                textValStatic = textValStaticInput;
-                textValDynamic = textValDynamicInput;
-            } else {
-                let errMsg: string = "";
-                if (valueLength > 1) {
-                    errMsg = "Query returned more than one row, please filter data to return one row";
-                } else if (valueLength === 0) {
-                    errMsg = "Query contains null value";
-                }
-                const original: d3.Selection<HTMLElement> = this.target.append("div")
-                    .classed("tw_value errormsg", true)
-                    .text(errMsg)
-                    .attr("title", errMsg)
-                    .style("font-size", this.pointToPixel(textFontSize))
-                    .style("letter-spacing", this.letSpace(letSpacing))
-                    .style("word-spacing", this.getWordSpace(wordSpace))
-                    .style("line-height", this.getLineHeight(lHeight))
-                    .style("text-indent", this.getTextIndent(inden))
-                    .style("perspective", this.getPerspective(pers))
-                    .style("font-family", "Segoe UI Semibold")
-                    .style("color", "#777777")
-                    .style("transform", this.getSkewString(textSkewX, textSkewY));
+        /**
+         * Method to set text when direction is horizontal
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         */
+        public textSettingsHorizontal(textSettings) {
+            if (textSettings.alignment === "right") {
+                this.finalTextContainer.style("float", "right");
+            } else if (textSettings.alignment === "center") {
+                this.finalTextContainer.style("width", "");
             }
-            let url;
-            // To check if url field exists
-            if (dataView.categorical.categories !== undefined) {
-            for (const iterator of options.dataViews[0].categorical.categories) {
-                        if (iterator.source.type[`category`]
-                            === "WebUrl" && iterator.source.roles.URL) {
-                            url = (iterator.values.toString());
-                        }
-                    }
-                }  else {
-                    if (dataView.categorical.values[0].source.roles.URL) {
-                        if (dataView.categorical.values[0].source.type[`category`]
-                            === "WebUrl") {
-                            url = (dataView.categorical.values[0].values.toString());
-                        }
-                    }
+        }
+
+        /**
+         * Method to set top text when direction is vertical
+         * @param caseVertical             - variable to check if case is right to left or left to right
+         * @param textSettings             - variable that stores the different
+         *                                   configurations that are available on the text
+         * @param lower                    - variable to set lower space
+         * @param upper                    - variable to set upper space
+         */
+        public textSettingsVerticalTop(caseVertical, textSettings, lower, upper) {
+            if (caseVertical === "vertical-rl") {
+                if (textSettings.alignment === "center") {
+                    this.textSettingsTopValues(textSettings, lower.left, 0,
+                        "padding-right", "padding-left", "left", upper.left);
+                } else if (textSettings.alignment === "right") {
+                    this.textSettingsTopValues(textSettings, lower.right, 0,
+                        "padding-right", "padding-left", "left", upper.right);
+                } else if (textSettings.alignment === "left") {
+                    this.textSettingsTopValues(textSettings, 0, 0, "padding-right", "padding-left", "top", 0);
                 }
-            // Text Direction
-            let textAlign: string = textSettings.alignment;
-            let writingMode: string = textSettings.direction;
+            } else if (caseVertical === "vertical-lr") {
+                if (textSettings.alignment === "center") {
+                    this.textSettingsTopValues(textSettings, lower, 0, "padding-left", "padding-right", "left", lower);
+                } else if (textSettings.alignment === "right") {
+                    this.textSettingsTopValues(textSettings, upper, 0, "padding-left", "padding-right", "left", upper);
+                } else if (textSettings.alignment === "left") {
+                    this.textSettingsTopValues(textSettings, 0, 0, "padding-left", "padding-right", "top", 0);
+                }
+            }
+        }
+
+        /**
+         * Method to set top text
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         */
+        public textSettingsTop(textSettings: ITextSettings): void {
+            const paddingVal: number = textSettings.lineIndent >= 0 ?
+                textSettings.lineIndent : (-textSettings.lineIndent);
+            let caseVertical: string = "";
             switch (textSettings.direction) {
-                case "vertical-lr":
-                    textRotationVal = 180 + textRotationVal;
-                    writingMode = "tb-rl";
-                    break;
-                case "vertical-rl":
-                    writingMode = "tb-rl";
-                    break;
-                case "horizontal-bt":
-                    textRotationVal = 180 + textRotationVal;
-                    textAlign = textAlign === "left" ? "right" : (textAlign === "right" ? "left" : "center");
-                    writingMode = "horizontal-tb";
-                    break;
+                case "horizontal-tb": {
+                    this.textSettingsTopValues(textSettings, 0, 0, "padding-top", "padding-bottom", "top", 0);
+                    this.textSettingsHorizontal(textSettings);
+                }
+                                      break;
+                case "horizontal-bt": {
+                    this.textSettingsTopValues(textSettings, 0, 0, "padding-bottom", "padding-top", "top", 0);
+                    this.textSettingsHorizontal(textSettings);
+                }
+                                      break;
+                case "vertical-rl": {
+                    const lower = { left: -50, right: -100 };
+                    const upper = { left: 50, right: 100 };
+                    caseVertical = "vertical-rl";
+                    this.textSettingsVerticalTop(caseVertical, textSettings, lower, upper);
+                }
+                                    break;
+                case "vertical-lr": {
+                    const upper = 100;
+                    const lower = 50;
+                    caseVertical = "vertical-lr";
+                    this.textSettingsVerticalTop(caseVertical, textSettings, lower, upper);
+                }
+                                    break;
                 default: break;
             }
-            const element: string = d3.select(".tw_finalText").style("transform");
-            const newTransform: string =  `${element} rotate(${textRotationVal}deg)`;
-            this.finalTextContainer = d3.select(".tw_finalText")
-                .style("text-align", textAlign)
-                .style("writing-mode", writingMode)
-                .style("transform", newTransform);
+            this.finalTextContainer = this.finalTextContainer
+                .style("position", "relative")
+                .style("transform", this.transformed)
+                .style(this.positionName, this.positionVal)
+                .style(this.paddingType, this.getIndent(paddingVal));
+            this.finalTextContainer = this.finalTextContainer.append("div").classed("tw_pers", true);
+        }
 
-            // Vertical Alignment & Line Indentation
+        /**
+         * Method to set middle text when direction is vertical
+         * @param caseVertical              - variable to check if case is right to left or left to right
+         * @param textSettings              - variable that stores the different
+         *                                    configurations that are available on the text
+         * @param transformed               - variable that stores the transformed text
+         * @param propVal                   - variable to store the property value
+         * @param paddingType               - variable that stores the padding type value
+         */
+        public textSettingsVerticalMiddle(caseVertical, textSettings, transformed, propVal, paddingType) {
+            if (textSettings.alignment === "center") {
+                transformed = caseVertical === "vertical-lr" ? `${propVal}  translate(-50%, -50%)`
+                                                             : `${propVal}  translate(50%, 50%)`;
+                paddingType = caseVertical === "vertical-lr" ? textSettings.lineIndent >= 0 ?
+                "padding-right" : "padding-left" : textSettings.lineIndent >= 0 ?
+                "padding-left" : "padding-right";
+                this.finalTextContainer = this.finalTextContainer
+                    .style("left", "50%");
+            } else if (textSettings.alignment === "right") {
+                transformed = caseVertical === "vertical-lr" ? `${propVal}  translate(-100%, -50%)`
+                                                             : `${propVal}  translate(100%, 50%)`;
+                paddingType = caseVertical === "vertical-lr" ? textSettings.lineIndent >= 0 ?
+                "padding-right" : "padding-left" : textSettings.lineIndent >= 0 ?
+                "padding-left" : "padding-right";
+                this.finalTextContainer = this.finalTextContainer
+                    .style("left", "100%");
+            } else if (textSettings.alignment === "left") {
+                transformed = caseVertical === "vertical-lr" ? `${propVal}  translate(0%, -50%)`
+                                                             : `${propVal}  translate(0%, 50%)`;
+                paddingType = caseVertical === "vertical-lr" ? textSettings.lineIndent >= 0 ?
+                "padding-right" : "padding-left" : textSettings.lineIndent >= 0 ?
+                "padding-left" : "padding-right";
+            }
+        }
+
+        /**
+         * Method to set middle text
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         */
+        public textSettingsMiddle(textSettings: ITextSettings): void {
             const paddingVal: number = textSettings.lineIndent >= 0 ?
-            textSettings.lineIndent : (-textSettings.lineIndent);
+                textSettings.lineIndent : (-textSettings.lineIndent);
             let transformed: string = "";
             let paddingType: string = "";
             let positionName: string = "";
             let positionVal: string = "";
             const propVal: string = this.finalTextContainer.style("transform");
-            switch (textSettings.alignmentV) {
-                case "top": {
-                            switch (textSettings.direction) {
-                                case "horizontal-tb": {
-                                                        transformed = `${propVal} translate(0%, 0%)`;
-                                                        paddingType = textSettings.lineIndent >= 0 ?
-                                                        "padding-top" : "padding-bottom";
-                                                        positionName = "top";
-                                                        positionVal = "0%";
-
-                                                        if (textSettings.alignment === "right") {
-                                                            this.finalTextContainer.style("float", "right");
-                                                        } else if (textSettings.alignment === "center") {
-                                                            this.finalTextContainer.style("width", "");
-                                                            }
-                                                      }
-                                                      break;
-                                case "horizontal-bt": {
-                                                        transformed = `${propVal}  translate(0%, 0%)`;
-                                                        paddingType = textSettings.lineIndent >= 0 ?
-                                                        "padding-bottom" : "padding-top";
-                                                        positionName = "top";
-                                                        positionVal = "0%";
-
-                                                        if (textSettings.alignment === "right") {
-                                                            this.finalTextContainer.style("float", "right");
-                                                        } else if (textSettings.alignment === "center") {
-                                                            this.finalTextContainer.style("width", "");
-                                                            }
-                                                      }
-                                                      break;
-                                case "vertical-rl": {
-                                                        if (textSettings.alignment === "center") {
-                                                            transformed = `${propVal}  translate(-50%, 0%)`;
-                                                            paddingType = textSettings.lineIndent >= 0 ?
-                                                            "padding-right" : "padding-left";
-                                                            positionName = "left";
-                                                            positionVal = "50%";
-                                                        } else if (textSettings.alignment === "right") {
-                                                            transformed = `${propVal}  translate(-100%, 0%)`;
-                                                            paddingType = textSettings.lineIndent >= 0 ?
-                                                            "padding-right" : "padding-left";
-                                                            positionName = "left";
-                                                            positionVal = "100%";
-                                                        } else if (textSettings.alignment === "left") {
-                                                            transformed = `${propVal}  translate(0%, 0%)`;
-                                                            paddingType = textSettings.lineIndent >= 0 ?
-                                                            "padding-right" : "padding-left";
-                                                            positionName = "top";
-                                                            positionVal = "0%";
-                                                        }
-                                                    }
-                                                    break;
-                                case "vertical-lr": {
-                                                        if (textSettings.alignment === "center") {
-                                                            transformed = `${propVal}  translate(50%, 0%)`;
-                                                            paddingType = textSettings.lineIndent >= 0 ?
-                                                            "padding-left" : "padding-right";
-                                                            positionName = "left";
-                                                            positionVal = "50%";
-                                                        } else if (textSettings.alignment === "right") {
-                                                            transformed = `${propVal}  translate(100%, 0%)`;
-                                                            paddingType = textSettings.lineIndent >= 0 ?
-                                                            "padding-left" : "padding-right";
-                                                            positionName = "left";
-                                                            positionVal = "100%";
-                                                        } else if (textSettings.alignment === "left") {
-                                                            transformed = `${propVal}  translate(0%, 0%)`;
-                                                            paddingType = textSettings.lineIndent >= 0 ?
-                                                            "padding-left" : "padding-right";
-                                                            positionName = "top";
-                                                            positionVal = "0%";
-                                                        }
-                                                    }
-                                                    break;
-                                default: break;
-                            }
-                }           break;
-
-                case "middle": {
-                    positionName = "top";
-                    positionVal = "50%";
-                    switch (textSettings.direction) {
-                        case "horizontal-tb":   {
-                                                    transformed = `${propVal}  translate(0%, -50%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-top" : "padding-bottom";
-
-                                                    if (textSettings.alignment === "right") {
-                                                        this.finalTextContainer.style("float", "right");
-                                                    } else if (textSettings.alignment === "center") {
-                                                        this.finalTextContainer.style("width", "");
-                                                        }
-                                                }
-                                                break;
-                        case "horizontal-bt":   {
-                                                    transformed = `${propVal}  translate(0%, 50%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-bottom" : "padding-top";
-
-                                                    if (textSettings.alignment === "right") {
-                                                        this.finalTextContainer.style("float", "right");
-                                                    } else if (textSettings.alignment === "center") {
-                                                        this.finalTextContainer.style("width", "");
-                                                        }
-                                                }
-                                                break;
-                        case "vertical-rl": {
-                                                if (textSettings.alignment === "center") {
-                                                    transformed = `${propVal}  translate(-50%, -50%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-right" : "padding-left";
-                                                    this.finalTextContainer = this.finalTextContainer
-                                                        .style("left", "50%");
-                                                } else if (textSettings.alignment === "right") {
-                                                    transformed = `${propVal}  translate(-100%, -50%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-right" : "padding-left";
-                                                    this.finalTextContainer = this.finalTextContainer
-                                                        .style("left", "100%");
-                                                } else if (textSettings.alignment === "left") {
-                                                    transformed = `${propVal}  translate(0%, -50%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-right" : "padding-left";
-                                                }
-                                            }
-                                            break;
-                        case "vertical-lr": {
-                                                if (textSettings.alignment === "center") {
-                                                    transformed = `${propVal}  translate(50%, 50%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-left" : "padding-right";
-                                                    this.finalTextContainer = this.finalTextContainer
-                                                        .style("left", "50%");
-                                                } else if (textSettings.alignment === "right") {
-                                                    transformed = `${propVal}  translate(100%, 50%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-left" : "padding-right";
-                                                    this.finalTextContainer = this.finalTextContainer
-                                                        .style("left", "100%");
-                                                } else if (textSettings.alignment === "left") {
-                                                    transformed = `${propVal}  translate(0%, 50%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-left" : "padding-right";
-                                                }
-                                            }
-                                            break;
-                        default: break;
-                    }
-                }              break;
-
-                case "bottom": {
-                    positionName = "top";
-                    positionVal = "100%";
-                    switch (textSettings.direction) {
-                        case "horizontal-tb":   {
-                                                    transformed = `${propVal}  translate(0%, -100%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-top" : "padding-bottom";
-
-                                                    if (textSettings.alignment === "right") {
-                                                        this.finalTextContainer.style("float", "right");
-                                                    } else if (textSettings.alignment === "center") {
-                                                        this.finalTextContainer.style("width", "");
-                                                        }
-                                                }
-                                                break;
-                        case "horizontal-bt":   {
-                                                    transformed = `${propVal}  translate(0%, 100%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-bottom" : "padding-top";
-
-                                                    if (textSettings.alignment === "right") {
-                                                        this.finalTextContainer.style("float", "right");
-                                                    } else if (textSettings.alignment === "center") {
-                                                        this.finalTextContainer.style("width", "");
-                                                        }
-                                                }
-                                                break;
-                        case "vertical-rl": {
-                                                if (textSettings.alignment === "center") {
-                                                    transformed = `${propVal}  translate(-50%, -100%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-right" : "padding-left";
-                                                    this.finalTextContainer = this.finalTextContainer
-                                                        .style("left", "50%");
-                                                } else if (textSettings.alignment === "right") {
-                                                    transformed = `${propVal}  translate(-100%, -100%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-right" : "padding-left";
-                                                    this.finalTextContainer = this.finalTextContainer
-                                                        .style("left", "100%");
-                                                } else if (textSettings.alignment === "left") {
-                                                    transformed = `${propVal}  translate(0%, -100%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-right" : "padding-left";
-                                                }
-                                            }
-                                            break;
-                        case "vertical-lr": {
-                                                if (textSettings.alignment === "center") {
-                                                    transformed = `${propVal}  translate(50%, 100%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-left" : "padding-right";
-                                                    this.finalTextContainer = this.finalTextContainer
-                                                        .style("left", "50%");
-                                                } else if (textSettings.alignment === "right") {
-                                                    transformed = `${propVal}  translate(100%, 100%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-left" : "padding-right";
-                                                    this.finalTextContainer = this.finalTextContainer
-                                                        .style("left", "100%");
-                                                } else if (textSettings.alignment === "left") {
-                                                    transformed = `${propVal}  translate(0%, 100%)`;
-                                                    paddingType = textSettings.lineIndent >= 0 ?
-                                                    "padding-left" : "padding-right";
-                                                }
-                                            }
-                                            break;
-                        default: break;
-                    }
-                }              break;
+            positionName = "top";
+            positionVal = "50%";
+            let caseVertical: string = "";
+            switch (textSettings.direction) {
+                case "horizontal-tb": {
+                    transformed = `${propVal}  translate(0%, -50%)`;
+                    paddingType = textSettings.lineIndent >= 0 ?
+                        "padding-top" : "padding-bottom";
+                    this.textSettingsHorizontal(textSettings);
+                }
+                                      break;
+                case "horizontal-bt": {
+                    transformed = `${propVal}  translate(0%, 50%)`;
+                    paddingType = textSettings.lineIndent >= 0 ?
+                        "padding-bottom" : "padding-top";
+                    this.textSettingsHorizontal(textSettings);
+                }
+                                      break;
+                case "vertical-rl": {
+                    caseVertical = "vertical-rl";
+                    this.textSettingsVerticalMiddle(caseVertical, textSettings, transformed, propVal, paddingType);
+                }
+                                    break;
+                case "vertical-lr": {
+                    caseVertical = "vertical-lr";
+                    this.textSettingsVerticalMiddle(caseVertical, textSettings, transformed, propVal, paddingType);
+                }
+                                    break;
                 default: break;
             }
             this.finalTextContainer = this.finalTextContainer
                 .style("position", "relative")
                 .style("transform", transformed)
                 .style(positionName, positionVal)
-                .style(paddingType, this.getLineIndent(paddingVal));
+                .style(paddingType, this.getIndent(paddingVal));
             this.finalTextContainer = this.finalTextContainer.append("div").classed("tw_pers", true);
-            // Text Ordering
-            const colonText: string = " : ";
-            if (textValStatic !== "" && this.staticTextSettings.showColon) {
-                if (this.staticTextSettings.textPosition === "suffix") {
+        }
 
-                    this.getText(textValDynamic, dynfontStyleClass, dyntextDecoration,
-                        textFontSize, dyntextShadow, dyntextShadowBlur,
-                                 dyntextShadowColor, dynamictextFontFamily,
-                                 this.dynamicSettings.backgroundcolor, dynfontwgt, textTransD);
-                    this.colonText(colonText);
-                    this.getTexts(textValStatic, staticfontStyleClass,
-                        statictextDecoration, textFontSize, staticTextFontFamily,
-                                  this.staticTextSettings.backgroundcolor, textTrans,
-                                  statictextShadow, statictextShadowBlur,
-                                  statictextShadowColor, staticfontwgt);
-                    if (this.dynamicSettings.italicStyle) {
-                        $(".dynamicpluscolon").css("padding-left", "4px");
-                    }
-                } else {
-                    this.getTexts(textValStatic, staticfontStyleClass, statictextDecoration,
-                        textFontSize, staticTextFontFamily, this.staticTextSettings.backgroundcolor,
-                        textTrans, statictextShadow, statictextShadowBlur, statictextShadowColor, staticfontwgt);
-                    this.colonText(colonText);
-                    this.getText(textValDynamic, dynfontStyleClass, dyntextDecoration, textFontSize,
-                        dyntextShadow, dyntextShadowBlur, dyntextShadowColor, dynamictextFontFamily,
-                        this.dynamicSettings.backgroundcolor, dynfontwgt, textTransD);
-                    if (this.staticTextSettings.italicStyle) {
-                        $(".dynamicpluscolon").css("padding-left", "4px");
-                    }
-                }
-            } else if (textValStatic !== "" && !this.staticTextSettings.showColon) {
-                if (this.staticTextSettings.textPosition === "suffix") {
-                    this.getText(textValDynamic, dynfontStyleClass, dyntextDecoration, textFontSize, dyntextShadow,
-                        dyntextShadowBlur, dyntextShadowColor, dynamictextFontFamily,
-                        this.dynamicSettings.backgroundcolor, dynfontwgt, textTransD);
-                    this.addSpace();
-                    this.getTexts(textValStatic, staticfontStyleClass, statictextDecoration, textFontSize,
-                        staticTextFontFamily, this.staticTextSettings.backgroundcolor, textTrans, statictextShadow,
-                        statictextShadowBlur, statictextShadowColor, staticfontwgt);
-                } else {
-                    this.getTexts(textValStatic, staticfontStyleClass, statictextDecoration, textFontSize,
-                        staticTextFontFamily, this.staticTextSettings.backgroundcolor, textTrans, statictextShadow,
-                        statictextShadowBlur, statictextShadowColor, staticfontwgt);
-                    this.addSpace();
-                    this.getText(textValDynamic, dynfontStyleClass, dyntextDecoration, textFontSize,
-                        dyntextShadow, dyntextShadowBlur, dyntextShadowColor, dynamictextFontFamily,
-                        this.dynamicSettings.backgroundcolor, dynfontwgt, textTransD);
-                }
-            } else if (textValStatic === "") {
-                this.getText(textValDynamic, dynfontStyleClass, dyntextDecoration, textFontSize, dyntextShadow,
-                    dyntextShadowBlur, dyntextShadowColor, dynamictextFontFamily, this.dynamicSettings.backgroundcolor,
-                    dynfontwgt, textTransD);
+        /**
+         * Method to set bottom text when direction is vertical
+         * @param caseVertical              - variable to check if case is right to left or left to right
+         * @param textSettings              - variable that stores the different
+         *                                    configurations that are available on the text
+         * @param transformed               - variable that stores the transformed text
+         * @param propVal                   - variable to store the property value
+         * @param paddingType               - variable that stores the padding type value
+         */
+        public textSettingsVerticalBottom(caseVertical, textSettings, transformed, propVal, paddingType) {
+            if (textSettings.alignment === "center") {
+                transformed = caseVertical === "vertical-rl" ? `${propVal}  translate(-50%, -100%)`
+                                                             : `${propVal}  translate(50%, 100%)`;
+                paddingType = caseVertical === "vertical-rl" ? textSettings.lineIndent >= 0 ?
+                    "padding-right" : "padding-left" : textSettings.lineIndent >= 0 ?
+                    "padding-left" : "padding-right";
+                this.finalTextContainer = this.finalTextContainer
+                    .style("left", "50%");
+            } else if (textSettings.alignment === "right") {
+                transformed = caseVertical === "vertical-rl" ? `${propVal}  translate(-100%, -100%)`
+                                                             : `${propVal}  translate(100%, 100%)`;
+                paddingType = caseVertical === "vertical-rl" ? textSettings.lineIndent >= 0 ?
+                    "padding-right" : "padding-left" : textSettings.lineIndent >= 0 ?
+                    "padding-left" : "padding-right";
+                this.finalTextContainer = this.finalTextContainer
+                    .style("left", "100%");
+            } else if (textSettings.alignment === "left") {
+                transformed = caseVertical === "vertical-rl" ? `${propVal}  translate(0%, -100%)`
+                                                             : `${propVal}  translate(0%, 100%)`;
+                paddingType = caseVertical === "vertical-rl" ? textSettings.lineIndent >= 0 ?
+                    "padding-right" : "padding-left" : textSettings.lineIndent >= 0 ?
+                    "padding-left" : "padding-right";
             }
+        }
 
-            const dynamicText = $(".dynamicText");
-            const twFinalText = $(".tw_finalText");
-            // Text Overflow Handling
-            if (textRotationVal !== 0) {
-                const textWidth: number = twFinalText.width();
-                const textWidth2: number = $(".staticText").width() + dynamicText.width() +
-                $(".dynamicpluscolon").width();
-                const textHeight: number = twFinalText.height();
-                switch (textSettings.alignmentV) {
-                    case "top": {
-                        switch (textSettings.direction) {
-                            case "horizontal-tb":   {
-                                                        textRotationVal = textRotationVal > 0 ?
-                                                        textRotationVal % 180 : (-textRotationVal) % 180;
-                                                        if (textSettings.alignment !== "center") {
-                                                            this.finalTextContainer
-                                                            .style("margin-top", `${((textWidth / 2)
-                                                                * Math.sin(this.toRadians(textRotationVal)))}px`);
-                                                        } else {
-                                                            this.finalTextContainer
-                                                            .style("margin-top", `${((textWidth2 / 2)
-                                                                * Math.sin(this.toRadians(textRotationVal)))}px`);
-                                                        }
-                                                    }
-                                                    break;
-                            case "horizontal-bt":   {
-                                                        textRotationVal = textRotationVal > 0 ?
-                                                        textRotationVal % 180 : (-textRotationVal) % 180;
-                                                        if (textSettings.alignment !== "center") {
-                                                            this.finalTextContainer.style("margin-top",
-                                                            `${((textWidth / 2) *
-                                                                Math.sin(this.toRadians(textRotationVal)))}px`);
-                                                        } else {
-                                                            this.finalTextContainer
-                                                            .style("margin-top", `${((textWidth2 / 2)
-                                                                * Math.sin(this.toRadians(textRotationVal)))}px`);
-                                                        }
-                                                    }
-                                                    break;
-                            case "vertical-rl": {
-                                                    let buffer: number = 0;
-                                                    let rotVal: number
-                                                    = textRotationVal > 0 ? textRotationVal : -textRotationVal;
-                                                    textRotationVal = textRotationVal > 0 ?
-                                                     textRotationVal % 180 : (-textRotationVal) % 180;
-                                                    rotVal = rotVal % 360;
-                                                    if (rotVal < 180) {
-                                                        buffer = (rotVal / 100 * 2) * textSettings.fontSize;
-                                                    } else {
-                                                        buffer = ((360 - rotVal) / 100 * 2) * textSettings.fontSize;
-                                                    }
-                                                    if (textSettings.alignment === "left") {
-                                                        this.finalTextContainer
-                                                        .style("margin-left", `${((textHeight / 2)
-                                                            * Math.sin(this.toRadians(textRotationVal)))}px`);
-                                                    } else if (textSettings.alignment === "right") {
-                                                        this.finalTextContainer
-                                                        .style("margin-left", `${-((textHeight / 2) *
-                                                            Math.sin(this.toRadians(textRotationVal)) + buffer)}px`);
-                                                        }
-                                                }
-                                                break;
-                            case "vertical-lr": {
-                                                    let buffer: number = 0;
-                                                    textRotationVal = textSettings.alignment === "right" ?
-                                                     textRotationVal - 180 : textRotationVal;
-                                                    let rotVal: number =
-                                                    textRotationVal > 0 ? textRotationVal : -textRotationVal;
-                                                    textRotationVal = textRotationVal > 0 ?
-                                                     textRotationVal % 180 : (-textRotationVal) % 180;
-                                                    rotVal = rotVal % 360;
-                                                    if (rotVal < 180) {
-                                                        buffer = (rotVal / 100 * 2) * textSettings.fontSize;
-                                                    } else {
-                                                        buffer = ((360 - rotVal) / 100 * 2) * textSettings.fontSize;
-                                                    }
-                                                    if (textSettings.alignment === "left") {
-                                                        this.finalTextContainer
-                                                        .style("margin-left", `${((textHeight / 2) *
-                                                            Math.sin(this.toRadians(textRotationVal)))}px`);
-                                                    } else if (textSettings.alignment === "right") {
-                                                        this.finalTextContainer
-                                                        .style("margin-left", `${-((textHeight / 2) *
-                                                            Math.sin(this.toRadians(textRotationVal)) + buffer)}px`);
-                                                        }
-                                                }
-                                                break;
-                            default: break;
-                        }
-                    }           break;
-
-                    case "middle": {
-                        switch (textSettings.direction) {
-                            case "vertical-rl": {
-                                let marginT: number = 0;
-                                let marginL: number = 0;
-                                let buffer: number = 0;
-                                let rotVal: number = textRotationVal > 0 ? textRotationVal : -textRotationVal;
-                                rotVal = rotVal % 360;
-                                if (rotVal < 180) {
-                                    buffer = (rotVal / 100 * 2) * textWidth;
-                                } else {
-                                    buffer = ((360 - rotVal) / 100 * 2) * textWidth;
-                                }
-                                switch (textSettings.alignment) {
-                                    case "left":    {
-                                                        if (rotVal > 0 && rotVal <= 90) {
-                                                            const a: number = Math.sin(this.toRadians(90 - rotVal));
-                                                            marginT = ((textHeight - (textHeight) * a) / 2);
-                                                        } else if ((rotVal > 90 && rotVal <= 270)) {
-                                                            const a: number = Math.sin(this.toRadians(rotVal - 90));
-                                                            marginT = ((textHeight + (textHeight) * a) / 2);
-                                                        } else if (rotVal > 270 && rotVal < 360) {
-                                                            const a: number = Math.sin(this.toRadians(rotVal % 270));
-                                                            marginT = ((textHeight - (textHeight) * a) / 2);
-
-                                                        }
-                                                        if ((rotVal > 180 && rotVal < 360)) {
-                                                            const a: number = -Math.sin(this.toRadians(rotVal));
-                                                            marginL = (((textHeight) * a));
-                                                        }
-                                                        this.finalTextContainer.style("margin-top", `${-marginT}px`);
-                                                        this.finalTextContainer
-                                                        .style("margin-left", `${marginL - buffer}px`);
-                                                    }
-                                                    break;
-                                    case "right":   {
-                                                        if (rotVal > 0 && rotVal <= 90) {
-                                                            const a: number = Math.sin(this.toRadians(90 - rotVal));
-                                                            marginT = ((textHeight - (textHeight) * a) / 2);
-                                                        } else if ((rotVal > 90 && rotVal <= 270)) {
-                                                            const a: number = Math.sin(this.toRadians(rotVal - 90));
-                                                            marginT = ((textHeight + (textHeight) * a) / 2);
-                                                        } else if (rotVal > 270 && rotVal < 360) {
-                                                            const a: number = Math.sin(this.toRadians(rotVal % 270));
-                                                            marginT = ((textHeight - (textHeight) * a) / 2);
-                                                        }
-                                                        if ((rotVal > 0 && rotVal < 180)) {
-                                                            const a: number = -Math.sin(this.toRadians(rotVal));
-                                                            marginL = (((textHeight) * a));
-                                                        }
-                                                        this.finalTextContainer.style("margin-top", `${-marginT}px`);
-                                                        this.finalTextContainer
-                                                        .style("margin-left", `${marginL - buffer}px`);
-                                                    }
-                                                    break;
-                                    case "center":  {
-                                                        if (rotVal > 0 && rotVal <= 90) {
-                                                            const b: number = Math.sin(this.toRadians(90 - rotVal));
-                                                            marginT = ((textHeight - (textHeight) * b) / 2);
-                                                        } else if ((rotVal > 90 && rotVal <= 270)) {
-                                                            const b: number = Math.sin(this.toRadians(rotVal - 90));
-                                                            marginT = ((textHeight + (textHeight) * b) / 2);
-                                                        } else if (rotVal > 270 && rotVal < 360) {
-                                                            const b: number = Math.sin(this.toRadians(rotVal % 270));
-                                                            marginT = ((textHeight - (textHeight) * b) / 2);
-                                                        }
-                                                        let a: number = Math.sin(this.toRadians(rotVal));
-                                                        a = a > 0 ? a : -a;
-                                                        marginL = (((textHeight) * a)) / 2;
-                                                        this.finalTextContainer.style("margin-top", `${-marginT}px`);
-                                                        if (rotVal < 180) {
-                                                            this.finalTextContainer
-                                                            .style("margin-left", `${-marginL}px`);
-                                                        } else {
-                                                            this.finalTextContainer
-                                                            .style("margin-left", `${marginL}px`);
-                                                        }
-                                                    }
-                                                    break;
-                                    default: break;
-                                }
-                            }                   break;
-                            case "vertical-lr": {
-                                let marginT: number = 0;
-                                let marginL: number = 0;
-                                let buffer: number = 0;
-                                let rotVal: number = textRotationVal > 0 ? textRotationVal : -textRotationVal;
-                                rotVal = rotVal - 180;
-                                rotVal = rotVal % 360;
-                                if (rotVal < 180) {
-                                    buffer = (rotVal / 100 * 2) * textSettings.fontSize;
-                                } else {
-                                    buffer = ((360 - rotVal) / 100 * 2) * textSettings.fontSize;
-                                }
-                                switch (textSettings.alignment) {
-                                    case "left": {
-                                                    if (rotVal > 0 && rotVal <= 90) {
-                                                        const a: number = Math.sin(this.toRadians(90 - rotVal % 90));
-                                                        marginT = ((textHeight - (textHeight) * a) / 2);
-                                                    } else if ((rotVal > 90 && rotVal <= 270)) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal - 90));
-                                                        marginT = ((textHeight + (textHeight) * a) / 2);
-                                                    } else if (rotVal > 270 && rotVal < 360) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal % 270));
-                                                        marginT = ((textHeight - (textHeight) * a) / 2);
-                                                    }
-                                                    if ((rotVal > 180 && rotVal < 360)) {
-                                                        const a: number = -Math.sin(this.toRadians(rotVal));
-                                                        marginL = (((textHeight) * a));
-                                                    }
-                                                    this.finalTextContainer.style("margin-top", `${-marginT}px`);
-                                                    this.finalTextContainer.style("margin-left", `${marginL}px`);
-                                                 }
-                                                 break;
-                                    case "right": {
-                                                    if (rotVal > 0 && rotVal <= 90) {
-                                                        const a: number = Math.sin(this.toRadians(90 - rotVal));
-                                                        marginT = ((textHeight - (textHeight) * a) / 2);
-                                                    } else if ((rotVal > 90 && rotVal <= 270)) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal - 90));
-                                                        marginT = ((textHeight + (textHeight) * a) / 2);
-                                                    } else if (rotVal > 270 && rotVal < 360) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal % 270));
-                                                        marginT = ((textHeight - (textHeight) * a) / 2);
-                                                    }
-                                                    if ((rotVal > 0 && rotVal < 180)) {
-                                                        const a: number = -Math.sin(this.toRadians(rotVal));
-                                                        marginL = (((textHeight) * a));
-                                                    }
-                                                    this.finalTextContainer.style("margin-top", `${-marginT}px`);
-                                                    this.finalTextContainer
-                                                    .style("margin-left", `${(marginL - buffer)}px`);
-                                                  }
-                                                  break;
-                                    case "center":  {
-                                                        if (rotVal > 0 && rotVal <= 90) {
-                                                            const b: number =
-                                                            Math.sin(this.toRadians(90 - rotVal % 90));
-                                                            marginT = ((textHeight - (textHeight) * b) / 2);
-                                                        } else if ((rotVal > 90 && rotVal <= 270)) {
-                                                            const b: number = Math.sin(this.toRadians(rotVal - 90));
-                                                            marginT = ((textHeight + (textHeight) * b) / 2);
-                                                        } else if (rotVal > 270 && rotVal < 360) {
-                                                            const b: number = Math.sin(this.toRadians(rotVal % 270));
-                                                            marginT = ((textHeight - (textHeight) * b) / 2);
-                                                        }
-                                                        let a: number = Math.sin(this.toRadians(rotVal));
-                                                        a = a > 0 ? a : -a;
-                                                        marginL = (((textHeight) * a)) / 2;
-                                                        this.finalTextContainer.style("margin-top", `${-marginT}px`);
-                                                        if (rotVal < 180) {
-                                                            this.finalTextContainer
-                                                            .style("margin-left", `${-marginL}px`);
-                                                        } else {
-                                                            this.finalTextContainer
-                                                            .style("margin-left", `${marginL}px`);
-                                                        }
-                                                    }
-                                                    break;
-                                    default: break;
-                                }
-                            }                   break;
-                            default: break;
-                        }
-                    }              break;
-
-                    case "bottom": {
-                        switch (textSettings.direction) {
-                            case "horizontal-tb":   {
-                                                        let buffer: number = 0;
-                                                        let rotVal: number = textRotationVal > 0 ?
-                                                        textRotationVal : -textRotationVal;
-                                                        textRotationVal = textRotationVal > 0 ? textRotationVal % 180 :
-                                                        (-textRotationVal) % 180;
-                                                        rotVal = rotVal % 360;
-                                                        if (rotVal < 180) {
-                                                            buffer = (rotVal / 100 * 2) * textSettings.fontSize;
-                                                        } else {
-                                                            buffer = ((360 - rotVal) / 100 * 2) * textSettings.fontSize;
-                                                        }
-                                                        if (textSettings.alignment !== "center") {
-                                                            this.finalTextContainer
-                                                            .style("margin-top", `${(-((textWidth / 2) * Math.sin(
-                                                                this.toRadians(textRotationVal)) + (buffer)))}px`);
-                                                        } else {
-                                                            this.finalTextContainer
-                                                            .style("margin-top", `${(-((textWidth2 / 2) * Math.sin(
-                                                                this.toRadians(textRotationVal)) + (buffer)))}px`);
-                                                        }
-                                                    }
-                                                    break;
-                            case "horizontal-bt": {
-                                                    let buffer: number = 0;
-                                                    textRotationVal = textRotationVal - 180;
-                                                    const rotVal: number = textRotationVal > 0 ?
-                                                    textRotationVal : -textRotationVal;
-                                                    textRotationVal = textRotationVal > 0 ? textRotationVal % 180 :
-                                                    (-textRotationVal) % 180;
-                                                    if (rotVal < 180) {
-                                                        buffer = (rotVal / 100 * 2) * textSettings.fontSize;
-                                                    } else {
-                                                        buffer = ((360 - rotVal) / 100 * 2) * textSettings.fontSize;
-                                                    }
-
-                                                    if (textSettings.alignment !== "center") {
-                                                        this.finalTextContainer
-                                                        .style("margin-top", `${(-((textWidth / 2) *
-                                                            Math.sin(this.toRadians(textRotationVal)) + (buffer)))}px`);
-                                                    } else {
-                                                        this.finalTextContainer
-                                                        .style("margin-top", `${(-((textWidth2 / 2) *
-                                                            Math.sin(this.toRadians(textRotationVal)) + (buffer)))}px`);
-                                                    }
-                                                  }
-                                                  break;
-                            case "vertical-rl": {
-                                let marginT: number = 0;
-                                let marginL: number = 0;
-                                let buffer: number = 0;
-                                let rotVal: number = textRotationVal > 0 ? textRotationVal : -textRotationVal;
-                                rotVal = rotVal % 360;
-                                if (rotVal < 180) {
-                                    buffer = (rotVal / 100 * 2) * textSettings.fontSize;
-                                } else {
-                                    buffer = ((360 - rotVal) / 100 * 2) * textSettings.fontSize;
-                                }
-                                switch (textSettings.alignment) {
-                                    case "left": {
-                                                    if (rotVal > 0 && rotVal <= 90) {
-                                                        const a: number = Math.sin(this.toRadians(90 - rotVal));
-                                                        marginT = ((textHeight - (textHeight) * a) / 2);
-                                                    } else if ((rotVal > 90 && rotVal <= 270)) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal - 90));
-                                                        marginT = ((textHeight + (textHeight) * a) / 2);
-
-                                                    } else if (rotVal > 270 && rotVal < 360) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal % 270));
-                                                        marginT = ((textHeight - (textHeight) * a) / 2);
-                                                    }
-                                                    if (rotVal <= 180) {
-                                                        const a: number = -Math.sin(this.toRadians(rotVal % 180));
-                                                        marginL = ((textHeight) * a) / 2;
-                                                    } else if (rotVal > 180) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal % 180));
-                                                        marginL = ((1.5 * textHeight) * a);
-                                                    }
-                                                    this.finalTextContainer.style("margin-top", `${-2 * marginT}px`);
-                                                    this.finalTextContainer.style("margin-left", `${marginL}px`);
-                                                 }
-                                                 break;
-                                    case "right": {
-                                                    if (rotVal > 0 && rotVal <= 90) {
-                                                        const a: number = Math.sin(this.toRadians(90 - rotVal));
-                                                        marginT = ((textHeight - (textHeight) * a) / 2);
-                                                    } else if ((rotVal > 90 && rotVal <= 270)) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal - 90));
-                                                        marginT = ((textHeight + (textHeight) * a) / 2);
-                                                    } else if (rotVal > 270 && rotVal < 360) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal % 270));
-                                                        marginT = ((textHeight - (textHeight) * a) / 2);
-                                                    }
-                                                    if (rotVal <= 180) {
-                                                        const a: number = -Math.sin(this.toRadians(rotVal % 180));
-                                                        marginL = ((1.5 * textHeight) * a);
-
-                                                    } else if (rotVal > 180) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal % 180));
-                                                        marginL = ((textHeight) * a) / 2;
-                                                    }
-                                                    this.finalTextContainer.style("margin-top", `${-2 * marginT}px`);
-                                                    this.finalTextContainer
-                                                    .style("margin-left", `${marginL - buffer}px`);
-                                                  }
-                                                  break;
-                                    case "center":  {
-                                                        if (rotVal > 0 && rotVal <= 90) {
-                                                            const b: number = Math.sin(this.toRadians(90 - rotVal));
-                                                            marginT = ((textHeight - (textHeight) * b) / 2);
-                                                        } else if ((rotVal > 90 && rotVal <= 270)) {
-                                                            const b: number = Math.sin(this.toRadians(rotVal - 90));
-                                                            marginT = ((textHeight + (textHeight) * b) / 2);
-                                                        } else if (rotVal > 270 && rotVal < 360) {
-                                                            const b: number = Math.sin(this.toRadians(rotVal % 270));
-                                                            marginT = ((textHeight - (textHeight) * b) / 2);
-                                                        }
-                                                        if (rotVal <= 180) {
-                                                            const b: number = -Math.sin(this.toRadians(rotVal % 180));
-                                                            marginL = ((textHeight) * b) / 2;
-                                                        } else if (rotVal > 180) {
-                                                            const b: number = Math.sin(this.toRadians(rotVal % 180));
-                                                            marginL = ((1.5 * textHeight) * b);
-                                                        }
-                                                        let a: number = Math.sin(this.toRadians(rotVal));
-                                                        a = a > 0 ? a : -a;
-                                                        marginL = (((textHeight) * a));
-                                                        this.finalTextContainer
-                                                        .style("margin-top", `${-2 * marginT}px`);
-                                                        if (rotVal < 180) {
-                                                            this.finalTextContainer
-                                                            .style("margin-left", `${-marginL}px`);
-                                                        } else {
-                                                            this.finalTextContainer
-                                                            .style("margin-left", `${marginL}px`);
-                                                        }
-                                                    }
-                                                    break;
-                                    default: break;
-                                }
-                            }                   break;
-
-                            case "vertical-lr": {
-                                let marginT: number = 0;
-                                let marginL: number = 0;
-                                let buffer: number = 0;
-                                let rotVal: number = textRotationVal > 0 ? textRotationVal : -textRotationVal;
-                                rotVal = rotVal - 180;
-                                rotVal = rotVal % 360;
-                                if (rotVal < 180) {
-                                    buffer = (rotVal / 100 * 2) * textSettings.fontSize;
-                                } else {
-                                    buffer = ((360 - rotVal) / 100 * 2) * textSettings.fontSize;
-                                }
-                                switch (textSettings.alignment) {
-                                    case "left": {
-                                                    if (rotVal > 0 && rotVal <= 90) {
-                                                        const a: number = Math.sin(this.toRadians(90 - rotVal));
-                                                        marginT = ((textHeight - (textHeight) * a) / 2);
-                                                    } else if ((rotVal > 90 && rotVal <= 270)) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal - 90));
-                                                        marginT = ((textHeight + (textHeight) * a) / 2);
-                                                    } else if (rotVal > 270 && rotVal < 360) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal % 270));
-                                                        marginT = ((textHeight - (textHeight) * a) / 2);
-                                                    }
-                                                    if (rotVal <= 180) {
-                                                        const a: number = -Math.sin(this.toRadians(rotVal % 180));
-                                                        marginL = ((textHeight) * a) / 2;
-                                                    } else if (rotVal > 180) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal % 180));
-                                                        marginL = ((1.5 * textHeight) * a);
-                                                    }
-                                                    this.finalTextContainer.style("margin-top", `${-2 * marginT}px`);
-                                                    this.finalTextContainer.style("margin-left", `${marginL}px`);
-                                                 }
-                                                 break;
-                                    case "right": {
-                                                    if (rotVal > 0 && rotVal <= 90) {
-                                                        const a: number = Math.sin(this.toRadians(90 - rotVal));
-                                                        marginT = ((textHeight - (textHeight) * a) / 2);
-                                                    } else if ((rotVal > 90 && rotVal <= 270)) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal - 90));
-                                                        marginT = ((textHeight + (textHeight) * a) / 2);
-
-                                                    } else if (rotVal > 270 && rotVal < 360) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal % 270));
-                                                        marginT = ((textHeight - (textHeight) * a) / 2);
-                                                    }
-                                                    if (rotVal <= 180) {
-                                                        const a: number = -Math.sin(this.toRadians(rotVal % 180));
-                                                        marginL = ((1.5 * textHeight) * a);
-
-                                                    } else if (rotVal > 180) {
-                                                        const a: number = Math.sin(this.toRadians(rotVal % 180));
-                                                        marginL = ((textHeight) * a) / 2;
-                                                    }
-                                                    this.finalTextContainer.style("margin-top", `${-2 * marginT}px`);
-                                                    this.finalTextContainer
-                                                    .style("margin-left", `${marginL - buffer}px`);
-                                                  }
-                                                  break;
-                                    case "center":  {
-                                                        if (rotVal > 0 && rotVal <= 90) {
-                                                            const b: number = Math.sin(this.toRadians(90 - rotVal));
-                                                            marginT = ((textHeight - (textHeight) * b) / 2);
-                                                        } else if ((rotVal > 90 && rotVal <= 270)) {
-                                                            const b: number = Math.sin(this.toRadians(rotVal - 90));
-                                                            marginT = ((textHeight + (textHeight) * b) / 2);
-
-                                                        } else if (rotVal > 270 && rotVal < 360) {
-                                                            const b: number = Math.sin(this.toRadians(rotVal % 270));
-                                                            marginT = ((textHeight - (textHeight) * b) / 2);
-                                                        }
-                                                        if (rotVal <= 180) {
-                                                            const b: number = -Math.sin(this.toRadians(rotVal % 180));
-                                                            marginL = ((textHeight) * b) / 2;
-                                                        } else if (rotVal > 180) {
-                                                            const b: number = Math.sin(this.toRadians(rotVal % 180));
-                                                            marginL = ((1.5 * textHeight) * b);
-                                                        }
-                                                        let a: number = Math.sin(this.toRadians(rotVal));
-                                                        a = a > 0 ? a : -a;
-                                                        marginL = (((textHeight) * a));
-                                                        this.finalTextContainer
-                                                        .style("margin-top", `${-2 * marginT}px`);
-                                                        if (rotVal < 180) {
-                                                            this.finalTextContainer
-                                                            .style("margin-left", `${-marginL}px`);
-                                                        } else {
-                                                            this.finalTextContainer
-                                                            .style("margin-left", `${marginL}px`);
-                                                        }
-                                                    }
-                                                    break;
-                                    default: break;
-                                }
-                            }                   break;
-                            default: break;
-                        }
-                    }              break;
-                    default: break;
+        /**
+         * Method to set bottom text
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         */
+        public textSettingsBottom(textSettings: ITextSettings): void {
+            const paddingVal: number = textSettings.lineIndent >= 0 ?
+                textSettings.lineIndent : (-textSettings.lineIndent);
+            let transformed: string = "";
+            let paddingType: string = "";
+            let positionName: string = "";
+            let positionVal: string = "";
+            let caseVertical: string = "";
+            const propVal: string = this.finalTextContainer.style("transform");
+            positionName = "top";
+            positionVal = "100%";
+            switch (textSettings.direction) {
+                case "horizontal-tb": {
+                    transformed = `${propVal}  translate(0%, -100%)`;
+                    paddingType = textSettings.lineIndent >= 0 ?
+                        "padding-top" : "padding-bottom";
+                    this.textSettingsHorizontal(textSettings);
                 }
+                                      break;
+                case "horizontal-bt": {
+                    transformed = `${propVal}  translate(0%, 100%)`;
+                    paddingType = textSettings.lineIndent >= 0 ?
+                        "padding-bottom" : "padding-top";
+                    this.textSettingsHorizontal(textSettings);
+                }
+                                      break;
+                case "vertical-rl": {
+                    caseVertical = "vertical-rl";
+                    this.textSettingsVerticalBottom(caseVertical, textSettings, transformed, propVal, paddingType);
+                }
+                                    break;
+                case "vertical-lr": {
+                    caseVertical = "vertical-lr";
+                    this.textSettingsVerticalBottom(caseVertical, textSettings, transformed, propVal, paddingType);
+                }
+                                    break;
+                default: break;
             }
+            this.finalTextContainer = this.finalTextContainer
+                .style("position", "relative")
+                .style("transform", transformed)
+                .style(positionName, positionVal)
+                .style(paddingType, this.getIndent(paddingVal));
+            this.finalTextContainer = this.finalTextContainer.append("div").classed("tw_pers", true);
+        }
+
+        /**
+         * Method to set text
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         */
+        public textSettings(textSettings: ITextSettings): void {
+            switch (textSettings.alignmentV) {
+                case "top": {
+                    this.textSettingsTop(textSettings);
+                }
+                            break;
+                case "middle": {
+                    this.textSettingsMiddle(textSettings);
+                }
+                               break;
+                case "bottom": {
+                    this.textSettingsBottom(textSettings);
+                }
+                               break;
+                default: break;
+            }
+        }
+
+        /**
+         * Method to handle height issues in text
+         * @param {VisualUpdateOptions} options   - Contains references to the size of the container & the
+         *                                          dataView which contains all the data the visual had queried.
+         * @param {JQuery<HTMLElement>} dynamicText     - Variable that stores the dynamically updated text
+         * @param {any} url            - variables that stores the url that will be opened on click
+         * @param {number} valueLength          - Variable to store the length
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         */
+        public handleHeightIssue(
+            options: VisualUpdateOptions,
+            dynamicText: JQuery<HTMLElement>,
+            url: any,
+            valueLength: number,
+            textSettings: ITextSettings): void {
+            const upper = 100;
+            const pers: number = textSettings.perspective > 0 ? upper - textSettings.perspective + 1 : 0;
             if (textSettings.direction === "vertical-lr" || textSettings.direction === "vertical-rl") {
                 this.finalTextContainer.style("max-height", `${$("#sandbox-host").height()}px`);
             } else if (textSettings.direction === "horizontal-tb" || textSettings.direction === "horizontal-bt") {
                 this.finalTextContainer.style("max-width", `${$("#sandbox-host").width()}px`);
             }
-
-            // Applying Perpective
             if (valueLength === 1) {
                 let transformedVal: string = "";
-                if (pers == null || pers === 0) {
+                if (pers === null || pers === 0) {
                     d3.select(".tw_finalText").style("perspective", "none");
                 } else {
                     d3.select(".tw_finalText")
@@ -1478,45 +1009,811 @@ module powerbi.extensibility.visual {
                 }
                 d3.select(".tw_pers").style("transform", transformedVal);
             }
-        // Below Two lines are to handle height issue of div in edge
+            // Below Two lines are to handle height issue of div in edge
+            const dataView: DataView = this.dataViews = options.dataViews[0];
             const spanHeight: number = dynamicText.height();
             $(".tw_value.tw_finalText").height(spanHeight + 2);
             for (const jIterator of options.dataViews[0].categorical.categories) {
-                if (jIterator.source.type[`category`]
-                    === "WebUrl" && jIterator.source.roles.URL) {
-                        dynamicText.on("click", (): void => {
-
-                this.visualHost.launchUrl(url);
-            });
-        }
-    }
+                if (jIterator.source.type[`category`] === "WebUrl" && jIterator.source.roles.URL) {
+                    dynamicText.on("click", (): void => {
+                        this.visualHost.launchUrl(url);
+                    });
+                }
+            }
             if (dataView.categorical.categories !== undefined) {
-             for (const iterator of options.dataViews[0].categorical.categories) {
+                for (const iterator of options.dataViews[0].categorical.categories) {
                     if (iterator.source.type[`category`]
                         === "WebUrl" && iterator.source.roles.URL) {
-                            dynamicText.addClass("urlIcon");
+                        dynamicText.addClass("urlIcon");
                     }
                 }
-            }  else {
+            } else {
                 if (dataView.categorical.values[0].source.roles.URL) {
-                    if (dataView.categorical.values[0].source.type[`category`]
-                        === "WebUrl") {
-                            dynamicText.addClass("urlIcon");
+                    if (dataView.categorical.values[0].source.type[`category`] === "WebUrl") {
+                        dynamicText.addClass("urlIcon");
                     }
                 }
             }
-            this.eventService.renderingFinished(options);
-                   } catch (exeption) {
-                            this.eventService.renderingFailed(options, exeption);
-                       }
-
         }
 
+        /**
+         * Method to order the text
+         * @param {string} textValStatic   - variable that stores the value of static text
+         * @param {string} textValDynamic  - variable that stores the value of dynamic text
+         * @param {number} textFontSize    - variable that stores the font size of the text
+         * @param {DataView} dataView      - the dataview object, which contains all data needed to render the visual.
+         */
+        public textOrdering(
+            textValStatic: string,
+            textValDynamic: string,
+            textFontSize: number,
+            dataView: DataView): void {
+            const dynFontStyleClass: string = this.getFontStyleClassName(this.dynamicSettings);
+            const dynTextDecoration: string = this.getTextDecoration(this.dynamicSettings);
+            const dynTextShadow: string = this.getDynamicTextSettings(dataView).textShadow;
+            const dynTextShadowBlur: string = this.getDynamicTextSettings(dataView).textShadowBlur;
+            const dynTextShadowColor: string = this.getDynamicTextSettings(dataView).textShadowColor;
+            const staticFontStyleClass: string = this.getFontStyleClassName(this.staticTextSettings);
+            const staticTextDecoration: string = this.getTextDecoration(this.staticTextSettings);
+            const staticTextShadow: string = this.getStaticTextSettings(dataView).textShadow;
+            const staticTextShadowBlur: string = this.getStaticTextSettings(dataView).textShadowBlur;
+            const staticTextShadowColor: string = this.getStaticTextSettings(dataView).textShadowColor;
+            const staticFontWgt: string = this.getFontWeight(this.staticTextSettings);
+            const textTrans: string = this.getTextTransform(this.staticTextSettings);
+            const staticTextFontFamily: string = this.staticTextSettings.fontFamily;
+            const textTransD: string = this.getTextTransform(this.dynamicSettings);
+            const dynFontWgt: string = this.getFontWeight(this.dynamicSettings);
+            const dynamicTextFontFamily: string = this.dynamicSettings.fontFamily;
+            const colonText: string = " : ";
+            if (textValStatic !== "" && this.staticTextSettings.showColon) {
+                if (this.staticTextSettings.textPosition === "suffix") {
+                    this.getText(textValDynamic, dynFontStyleClass, dynTextDecoration,
+                        textFontSize, dynTextShadow, dynTextShadowBlur,
+                        dynTextShadowColor, dynamicTextFontFamily,
+                        this.dynamicSettings.backgroundColor, dynFontWgt, textTransD);
+                    this.colonText(colonText);
+                    this.getTexts(textValStatic, staticFontStyleClass,
+                        staticTextDecoration, textFontSize, staticTextFontFamily,
+                        this.staticTextSettings.backgroundColor, textTrans,
+                        staticTextShadow, staticTextShadowBlur,
+                        staticTextShadowColor, staticFontWgt);
+                    if (this.dynamicSettings.italicStyle) {
+                        $(".dynamicpluscolon").css("padding-left", "4px");
+                    }
+                } else {
+                    this.getTexts(textValStatic, staticFontStyleClass, staticTextDecoration,
+                        textFontSize, staticTextFontFamily, this.staticTextSettings.backgroundColor,
+                        textTrans, staticTextShadow, staticTextShadowBlur, staticTextShadowColor, staticFontWgt);
+                    this.colonText(colonText);
+                    this.getText(textValDynamic, dynFontStyleClass, dynTextDecoration, textFontSize,
+                        dynTextShadow, dynTextShadowBlur, dynTextShadowColor, dynamicTextFontFamily,
+                        this.dynamicSettings.backgroundColor, dynFontWgt, textTransD);
+                    if (this.staticTextSettings.italicStyle) {
+                        $(".dynamicpluscolon").css("padding-left", "4px");
+                    }
+                }
+            } else if (textValStatic !== "" && !this.staticTextSettings.showColon) {
+                if (this.staticTextSettings.textPosition === "suffix") {
+                    this.getText(textValDynamic, dynFontStyleClass, dynTextDecoration, textFontSize, dynTextShadow,
+                        dynTextShadowBlur, dynTextShadowColor, dynamicTextFontFamily,
+                        this.dynamicSettings.backgroundColor, dynFontWgt, textTransD);
+                    this.addSpace();
+                    this.getTexts(textValStatic, staticFontStyleClass, staticTextDecoration, textFontSize,
+                        staticTextFontFamily, this.staticTextSettings.backgroundColor, textTrans, staticTextShadow,
+                        staticTextShadowBlur, staticTextShadowColor, staticFontWgt);
+                } else {
+                    this.getTexts(textValStatic, staticFontStyleClass, staticTextDecoration, textFontSize,
+                        staticTextFontFamily, this.staticTextSettings.backgroundColor, textTrans, staticTextShadow,
+                        staticTextShadowBlur, staticTextShadowColor, staticFontWgt);
+                    this.addSpace();
+                    this.getText(textValDynamic, dynFontStyleClass, dynTextDecoration, textFontSize,
+                        dynTextShadow, dynTextShadowBlur, dynTextShadowColor, dynamicTextFontFamily,
+                        this.dynamicSettings.backgroundColor, dynFontWgt, textTransD);
+                }
+            } else if (textValStatic === "") {
+                this.getText(textValDynamic, dynFontStyleClass, dynTextDecoration, textFontSize, dynTextShadow,
+                    dynTextShadowBlur, dynTextShadowColor,
+                    dynamicTextFontFamily, this.dynamicSettings.backgroundColor,
+                    dynFontWgt, textTransD);
+            }
+        }
+
+        /**
+         * Method that updates the dataviews and render the visual
+         * @param {VisualUpdateOptions} options       - Contains references to the size of the container and
+         *                                              the dataView which contains all the data the visual had queried.
+         */
+        public update(options: VisualUpdateOptions): void {
+            try {
+                this.eventService.renderingStarted(options);
+                this.target.selectAll(".tw_value").remove();
+                const dataView: DataView = this.dataViews = options.dataViews[0];
+                let valueLength: number = 0;
+                const textSettings: ITextSettings = this.getTextSettings(dataView);
+                this.dynamicSettings = this.getDynamicTextSettings(dataView);
+                this.staticTextSettings = this.getStaticTextSettings(dataView);
+                const textValStaticInput: string = this.staticTextSettings.postText;
+                this.staticTextSettings.postText = textValStaticInput;
+                const valuesContainer: IDynamicTextContainer = this.getDynamicTextValue(dataView);
+                const textValDynamicInput: string = valuesContainer.textContainer;
+                const textFontSize: number = textSettings.fontSize;
+                const letSpacing: number = textSettings.letterSpacing;
+                const wordSpace: number = textSettings.wordSpacing;
+                const lHeight: number = textSettings.lineHeight;
+                const indent: number = textSettings.textIndent;
+                let textRotationVal: number = textSettings.textRotate === null ? 0 : textSettings.textRotate;
+                const textSkewX: number = textSettings.skewX;
+                const textSkewY: number = textSettings.skewY;
+                let textValStatic: string = "";
+                let textValDynamic: string = "";
+                valueLength = valuesContainer.lengthContainer;
+                if (valueLength === 1) { // Text Formatting
+                    const original: d3.Selection<HTMLElement> = this.target.append("div")
+                        .classed("tw_value tw_finalText", true)
+                        .style("font-size", this.pointToPixel(textFontSize))
+                        .style("letter-spacing", this.letSpace(letSpacing))
+                        .style("word-spacing", this.getWordSpace(wordSpace))
+                        .style("line-height", this.getLineHeight(lHeight))
+                        .style("text-indent", this.getIndent(indent))
+                        .style("color", textSettings.color +
+                            this.getOpacityHex(textSettings.transparency == null ? 0 : textSettings.transparency))
+                        .style("transform", this.getSkewString(textSkewX, textSkewY)).style("width", "fit-content");
+                    textValStatic = textValStaticInput;
+                    textValDynamic = textValDynamicInput;
+                } else {
+                    let errMsg: string = "";
+                    if (valueLength > 1) {
+                        errMsg = "Query returned more than one row, please filter data to return one row";
+                    } else if (valueLength === 0) {
+                        errMsg = "Query contains null value";
+                    }
+                }
+                let url;
+                if (dataView.categorical.categories !== undefined) { // To check if url field exists
+                    for (const iterator of options.dataViews[0].categorical.categories) {
+                        if (iterator.source.type[`category`] === "WebUrl" && iterator.source.roles.URL) {
+                            url = (iterator.values.toString());
+                        }
+                    }
+                } else {
+                    if (dataView.categorical.values[0].source.roles.URL) {
+                        if (dataView.categorical.values[0].source.type[`category`]
+                            === "WebUrl") {
+                            url = (dataView.categorical.values[0].values.toString());
+                        }
+                    }
+                }// Text Direction
+                let textAlign: string = textSettings.alignment;
+                let writingMode: string = textSettings.direction;
+                switch (textSettings.direction) {
+                    case "vertical-lr":
+                        textRotationVal = this.degree180 + textRotationVal; writingMode = "tb-rl";
+                        break;
+                    case "vertical-rl":
+                        writingMode = "tb-rl"; break;
+                    case "horizontal-bt":
+                        textRotationVal = this.degree180 + textRotationVal;
+                        textAlign = textAlign === "left" ? "right" : (textAlign === "right" ? "left" : "center");
+                        writingMode = "horizontal-tb"; break;
+                    default: break;
+                }
+                const element: string = d3.select(".tw_finalText").style("transform");
+                const newTransform: string = `${element} rotate(${textRotationVal}deg)`;
+                this.finalTextContainer = d3.select(".tw_finalText")
+                    .style("text-align", textAlign).style("writing-mode", writingMode).style("transform", newTransform);
+                this.textSettings(textSettings); // Vertical Alignment & Line Indentation
+                this.textOrdering(textValStatic, textValDynamic, textFontSize, dataView); // Text Ordering
+                const dynamicText = $(".dynamicText");
+                const twFinalText = $(".tw_finalText");
+                this.textOverflow(textRotationVal, textSettings, dynamicText, twFinalText); // Text Overflow Handling
+                this.handleHeightIssue(options, dynamicText, url, valueLength, textSettings); // Applying Perpective
+                this.eventService.renderingFinished(options);
+            } catch (exception) {
+                this.eventService.renderingFailed(options, exception);
+            }
+        }
+
+        /**
+         * Method to handle text overflow for left and right cases of middle text in right to left direction
+         * @param rotVal            - variable to store value of rotation
+         * @param marginT           - variable that stores the value of margin top
+         * @param textHeight        - variable to store text height
+         * @param marginL           - variable that stores the value of margin left
+         * @param buffer            - variable the stores the value to be differentiated from left margin
+         * @param rotValGreater     - variable that stores different values based on LR to compare for rotation val
+         * @param rotValLesser      - variable that stores different values based on LR to compare for rotation val
+         */
+        public textOverflowHandlerMiddleRL(rotVal, marginT, textHeight, marginL, buffer, rotValGreater, rotValLesser) {
+            if (rotVal > 0 && rotVal <= this.degree90) {
+                const rotationHeight: number = Math.sin(this.toRadians(this.degree90 - rotVal));
+                marginT = ((textHeight - textHeight * rotationHeight) / 2);
+            } else if (rotVal > this.degree90 && rotVal <= this.degree270) {
+                const rotationHeight: number = Math.sin(this.toRadians(rotVal - this.degree90));
+                marginT = ((textHeight + textHeight * rotationHeight) / 2);
+            } else if (rotVal > this.degree270 && rotVal < this.degree360) {
+                const rotationHeight: number = Math
+                    .sin(this.toRadians(rotVal % this.degree270));
+                marginT = ((textHeight - textHeight * rotationHeight) / 2);
+            }
+            if (rotVal > rotValGreater && rotVal < rotValLesser) {
+                const rotationHeight: number = -Math.sin(this.toRadians(rotVal));
+                marginL = textHeight * rotationHeight;
+            }
+            this.finalTextContainer.style("margin-top", `${-marginT}px`);
+            this.finalTextContainer.style("margin-left", `${marginL - buffer}px`);
+        }
+
+        /**
+         * Method to handle text overflow of middle RL
+         * @param {number} textRotationVal          - Variable to store the rotational value of the text
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         * @param {number} textHeight        - variable that stores the text height
+         * @param {number} textWidth         - variable that stores the text width
+         */
+        public textOverflowMiddleRL(
+            textRotationVal: number,
+            textSettings: ITextSettings,
+            textHeight: number,
+            textWidth: number): void {
+            let marginT: number = 0;
+            let marginL: number = 0;
+            let buffer: number = 0;
+            let rotVal: number = textRotationVal > 0 ? textRotationVal : -textRotationVal;
+            const upper = 100;
+            let rotValGreater: number;
+            let rotValLesser: number;
+            rotVal = rotVal % this.degree360;
+            if (rotVal < this.degree180) {
+                buffer = (rotVal / upper * 2) * textWidth;
+            } else {
+                buffer = ((this.degree360 - rotVal) / upper * 2) * textWidth;
+            }
+            switch (textSettings.alignment) {
+                case "left": {
+                    rotValGreater = this.degree180;
+                    rotValLesser = this.degree360;
+                    this.textOverflowHandlerMiddleRL(rotVal, marginT, textHeight,
+                        marginL, buffer, rotValGreater, rotValLesser);
+                }
+                             break;
+                case "right": {
+                    rotValGreater = 0;
+                    rotValLesser = this.degree180;
+                    this.textOverflowHandlerMiddleRL(rotVal, marginT, textHeight,
+                        marginL, buffer, rotValGreater, rotValLesser);
+                }
+                              break;
+                case "center": {
+                    if (rotVal > 0 && rotVal <= this.degree90) {
+                        const rotationHeight: number = Math.sin(this.toRadians(this.degree90 - rotVal));
+                        marginT = ((textHeight - textHeight * rotationHeight) / 2);
+                    } else if (rotVal > this.degree90 && rotVal <= this.degree270) {
+                        const rotationHeight: number = Math.sin(this.toRadians(rotVal - this.degree90));
+                        marginT = ((textHeight + textHeight * rotationHeight) / 2);
+                    } else if (rotVal > this.degree270 && rotVal < this.degree360) {
+                        const rotationHeight: number = Math.sin(this.toRadians(rotVal % this.degree270));
+                        marginT = ((textHeight - textHeight * rotationHeight) / 2);
+                    }
+                    let rotValHeight: number = Math.sin(this.toRadians(rotVal));
+                    rotValHeight = rotValHeight > 0 ? rotValHeight : -rotValHeight;
+                    marginL = (textHeight * rotValHeight) / 2;
+                    this.finalTextContainer.style("margin-top", `${-marginT}px`);
+                    if (rotVal < this.degree180) {
+                        this.finalTextContainer.style("margin-left", `${-marginL}px`);
+                    } else {
+                        this.finalTextContainer.style("margin-left", `${marginL}px`);
+                    }
+                }
+                               break;
+                default: break;
+            }
+        }
+
+        /**
+         * Method to handle text overflow for left and right cases of middle text in left to right direction
+         * @param caseLR            - variable that checks whether the case is Left or Right
+         * @param rotVal            - variable to store value of rotation
+         * @param marginT           - variable that stores the value of margin top
+         * @param textHeight        - variable to store text height
+         * @param marginL           - variable that stores the value of margin left
+         * @param rotValGreater     - variable that stores different values based on LR to compare for rotation val
+         * @param rotValLesser      - variable that stores different values based on LR to compare for rotation val
+         * @param buffer            - variable the stores the value to be differentiated from left margin
+         */
+        public textOverFlowMiddleLR(caseLR, rotVal, marginT, textHeight, marginL, rotValGreater, rotValLesser, buffer) {
+            if (rotVal > 0 && rotVal <= this.degree90) {
+                const rotValHei: number = caseLR === "left" ?
+                Math.sin(this.toRadians(this.degree90 - rotVal % this.degree90))
+                : Math.sin(this.toRadians(this.degree90 - rotVal));
+                marginT = ((textHeight - textHeight * rotValHei) / 2);
+            } else if (rotVal > this.degree90 && rotVal <= this.degree270) {
+                const rotValHei: number = Math.sin(this.toRadians(rotVal - this.degree90));
+                marginT = ((textHeight + textHeight * rotValHei) / 2);
+            } else if (rotVal > rotValGreater && rotVal < rotValLesser) {
+                const rotValHei: number = Math.sin(this.toRadians(rotVal % this.degree270));
+                marginT = ((textHeight - textHeight * rotValHei) / 2);
+            }
+            if (rotVal > this.degree180 && rotVal < this.degree360) {
+                const rotValHei: number = -Math.sin(this.toRadians(rotVal));
+                marginL = textHeight * rotValHei;
+            }
+            this.finalTextContainer.style("margin-top", `${-marginT}px`);
+            caseLR === "left" ? this.finalTextContainer.style("margin-left", `${marginL}px`)
+            : this.finalTextContainer.style("margin-left", `${(marginL - buffer)}px`);
+        }
+
+        /**
+         * Method to handle the text overflow in the middle
+         * @param {number} textRotationVal          - Variable to store the rotational value of the text
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         * @param {number} textHeight        - variable that stores the text height
+         * @param {number} textWidth         - variable that stores the text width
+         */
+        public textOverflowMiddle(
+            textRotationVal: number,
+            textSettings: ITextSettings,
+            textHeight: number,
+            textWidth: number): void {
+            let marginT: number = 0;
+            let marginL: number = 0;
+            let buffer: number = 0;
+            let rotVal: number = textRotationVal > 0 ? textRotationVal : -textRotationVal;
+            let rotValGreater: number;
+            let rotValLesser: number;
+            let caseLR: string = "";
+            switch (textSettings.direction) {
+                case "vertical-rl": {
+                    this.textOverflowMiddleRL(textRotationVal, textSettings, textHeight, textWidth);
+                }                   break;
+                case "vertical-lr": {
+                    rotVal = rotVal - this.degree180;
+                    rotVal = rotVal % this.degree360;
+                    const upper = 100;
+                    if (rotVal < this.degree180) {
+                        buffer = (rotVal / upper * 2) * textSettings.fontSize;
+                    } else {
+                        buffer = ((this.degree360 - rotVal) / upper * 2) * textSettings.fontSize;
+                    }
+                    switch (textSettings.alignment) {
+                        case "left": {
+                            rotValGreater = this.degree180;
+                            rotValLesser = this.degree360;
+                            caseLR = "left";
+                            this.textOverFlowMiddleLR(caseLR, rotVal, marginT, textHeight,
+                                marginL, rotValGreater, rotValLesser, buffer);
+                        }
+                                     break;
+                        case "right": {
+                            rotValGreater = 0;
+                            rotValLesser = this.degree180;
+                            caseLR = "right";
+                            this.textOverFlowMiddleLR(caseLR, rotVal, marginT, textHeight,
+                                marginL, rotValGreater, rotValLesser, buffer);
+                        }
+                                      break;
+                        case "center": {
+                            let rotValHei: number;
+                            if (rotVal > 0 && rotVal <= this.degree90) {
+                                rotValHei = Math
+                                    .sin(this.toRadians(this.degree90 - rotVal % this.degree90));
+                                marginT = ((textHeight - textHeight * rotValHei) / 2);
+                            } else if (rotVal > this.degree90 && rotVal <= this.degree270) {
+                                rotValHei = Math.sin(this.toRadians(rotVal - this.degree90));
+                                marginT = ((textHeight + textHeight * rotValHei) / 2);
+                            } else if (rotVal > this.degree270 && rotVal < this.degree360) {
+                                rotValHei = Math.sin(this.toRadians(rotVal % this.degree270));
+                                marginT = ((textHeight - textHeight * rotValHei) / 2);
+                            }
+                            rotValHei = Math.sin(this.toRadians(rotVal));
+                            rotValHei = rotValHei > 0 ? rotValHei : -rotValHei;
+                            marginL = (textHeight * rotValHei) / 2;
+                            this.finalTextContainer.style("margin-top", `${-marginT}px`);
+                            if (rotVal < this.degree180) {
+                                this.finalTextContainer
+                                    .style("margin-left", `${-marginL}px`);
+                            } else {
+                                this.finalTextContainer.style("margin-left", `${marginL}px`);
+                            }
+                        }
+                                       break;
+                        default: break;
+                    }
+                }                   break;
+                default: break;
+            }
+        }
+
+        /**
+         * Method to handle text overflow for left and right cases of bottom text
+         * @param caseLR            - variable that checks whether the case is Left or Right
+         * @param rotVal            - variable to store value of rotation
+         * @param marginT           - variable that stores the value of margin top
+         * @param textHeight        - variable to store text height
+         * @param marginL           - variable that stores the value of margin left
+         * @param buffer            - variable the stores the value to be differentiated from left margin
+         */
+        public textOverFlowHandlerBottom(caseLR, rotVal, marginT, textHeight, marginL, buffer) {
+            if (rotVal > 0 && rotVal <= this.degree90) {
+                const rotValHei: number = Math.sin(this.toRadians(this.degree90 - rotVal));
+                marginT = (textHeight - textHeight * rotValHei) / 2;
+            } else if (rotVal > this.degree90 && rotVal <= this.degree270) {
+                const rotValHei: number = Math.sin(this.toRadians(rotVal - this.degree90));
+                marginT = (textHeight + textHeight * rotValHei) / 2;
+            } else if (rotVal > this.degree270 && rotVal < this.degree360) {
+                const rotValHei: number = Math.sin(this.toRadians(rotVal % this.degree270));
+                marginT = (textHeight - textHeight * rotValHei) / 2;
+            }
+            if (rotVal <= this.degree180) {
+                const rotValHei: number = -Math.sin(this.toRadians(rotVal % this.degree180));
+                if (caseLR === "left") {
+                    marginL = (textHeight * rotValHei) / 2;
+                } else if (caseLR === "right") {
+                    marginL = (1.5 * textHeight) * rotValHei;
+                }
+            } else if (rotVal > this.degree180) {
+                const rotValHei: number = Math.sin(this.toRadians(rotVal % this.degree180));
+                if (caseLR === "left") {
+                    marginL = (1.5 * textHeight) * rotValHei;
+                } else if (caseLR === "right") {
+                    marginL = (textHeight * rotValHei) / 2;
+                }
+            }
+            this.finalTextContainer.style("margin-top", `${-2 * marginT}px`);
+            if (caseLR === "left") {
+                this.finalTextContainer.style("margin-left", `${marginL}px`);
+            } else if (caseLR === "right") {
+                this.finalTextContainer
+                        .style("margin-left", `${marginL - buffer}px`);
+            }
+        }
+
+        /**
+         * Method to handle text overflow in bottom RL
+         * @param {number} textRotationVal          - Variable to store the rotational value of the text
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         * @param {number} textHeight        - variable that stores the text height
+         */
+        public textOverflowBottomRL(textRotationVal: number, textSettings: ITextSettings, textHeight: number): void {
+            let marginT: number = 0;
+            let marginL: number = 0;
+            let buffer: number = 0;
+            let rotVal: number = textRotationVal > 0 ? textRotationVal : -textRotationVal;
+            rotVal = rotVal % this.degree360;
+            const upper = 100;
+            let caseLR: string = "";
+            if (rotVal < this.degree180) {
+                buffer = (rotVal / upper * 2) * textSettings.fontSize;
+            } else {
+                buffer = ((this.degree360 - rotVal) / upper * 2) * textSettings.fontSize;
+            }
+            switch (textSettings.alignment) {
+                case "left": {
+                    caseLR = "left";
+                    this.textOverFlowHandlerBottom(caseLR, rotVal, marginT, textHeight, marginL, buffer);
+                }
+                             break;
+                case "right": {
+                    caseLR = "right";
+                    this.textOverFlowHandlerBottom(caseLR, rotVal, marginT, textHeight, marginL, buffer);
+                }
+                              break;
+                case "center": {
+                    let rotValHei: number;
+                    if (rotVal > 0 && rotVal <= this.degree90) {
+                        rotValHei = Math.sin(this.toRadians(this.degree90 - rotVal));
+                        marginT = (textHeight - textHeight * rotValHei) / 2;
+                    } else if (rotVal > this.degree90 && rotVal <= this.degree270) {
+                        rotValHei = Math.sin(this.toRadians(rotVal - this.degree90));
+                        marginT = (textHeight + textHeight * rotValHei) / 2;
+                    } else if (rotVal > this.degree270 && rotVal < this.degree360) {
+                        rotValHei = Math.sin(this.toRadians(rotVal % this.degree270));
+                        marginT = (textHeight - textHeight * rotValHei) / 2;
+                    }
+                    if (rotVal <= this.degree180) {
+                        rotValHei = -Math.sin(this.toRadians(rotVal % this.degree180));
+                        marginL = (textHeight * rotValHei) / 2;
+                    } else if (rotVal > this.degree180) {
+                        rotValHei = Math.sin(this.toRadians(rotVal % this.degree180));
+                        marginL = (1.5 * textHeight) * rotValHei;
+                    }
+                    rotValHei = Math.sin(this.toRadians(rotVal));
+                    rotValHei = rotValHei > 0 ? rotValHei : -rotValHei;
+                    marginL = textHeight * rotValHei;
+                    this.finalTextContainer
+                        .style("margin-top", `${-2 * marginT}px`);
+                    if (rotVal < this.degree180) {
+                        this.finalTextContainer
+                            .style("margin-left", `${-marginL}px`);
+                    } else {
+                        this.finalTextContainer
+                            .style("margin-left", `${marginL}px`);
+                    }
+                }
+                               break;
+                default: break;
+            }
+        }
+
+        /**
+         * Method to handle text overflow in bottom LR
+         * @param {number} textRotationVal          - Variable to store the rotational value of the text
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         * @param {number} textHeight       - variable that stores the text height
+         */
+        public textOverflowBottomLR(
+            textRotationVal: number,
+            textSettings: ITextSettings,
+            textHeight: number): void {
+            let marginT: number = 0;
+            let marginL: number = 0;
+            let buffer: number = 0;
+            let rotVal: number = textRotationVal > 0 ? textRotationVal : -textRotationVal;
+            let caseLR: string = "";
+            rotVal = rotVal - this.degree180;
+            rotVal = rotVal % this.degree360;
+            const upper = 100;
+            if (rotVal < this.degree180) {
+                buffer = (rotVal / upper * 2) * textSettings.fontSize;
+            } else {
+                buffer = ((this.degree360 - rotVal) / upper * 2) * textSettings.fontSize;
+            }
+            switch (textSettings.alignment) {
+                case "left": {
+                    caseLR = "left";
+                    this.textOverFlowHandlerBottom(rotVal, marginT, textHeight, marginL, caseLR, buffer);
+                }
+                             break;
+                case "right": {
+                    caseLR = "right";
+                    this.textOverFlowHandlerBottom(rotVal, marginT, textHeight, marginL, caseLR, buffer);
+                }
+                              break;
+                case "center": {
+                    let rotValHei: number;
+                    if (rotVal > 0 && rotVal <= this.degree90) {
+                        rotValHei = Math.sin(this.toRadians(this.degree90 - rotVal));
+                        marginT = (textHeight - textHeight * rotValHei) / 2;
+                    } else if (rotVal > this.degree90 && rotVal <= this.degree270) {
+                        rotValHei = Math.sin(this.toRadians(rotVal - this.degree90));
+                        marginT = (textHeight + textHeight * rotValHei) / 2;
+
+                    } else if (rotVal > this.degree270 && rotVal < this.degree360) {
+                        rotValHei = Math.sin(this.toRadians(rotVal % this.degree270));
+                        marginT = (textHeight - textHeight * rotValHei) / 2;
+                    }
+                    if (rotVal <= this.degree180) {
+                        rotValHei = -Math.sin(this.toRadians(rotVal % this.degree180));
+                        marginL = (textHeight * rotValHei) / 2;
+                    } else if (rotVal > this.degree180) {
+                        rotValHei = Math.sin(this.toRadians(rotVal % this.degree180));
+                        marginL = (1.5 * textHeight) * rotValHei;
+                    }
+                    rotValHei = Math.sin(this.toRadians(rotVal));
+                    rotValHei = rotValHei > 0 ? rotValHei : -rotValHei;
+                    marginL = textHeight * rotValHei;
+                    this.finalTextContainer
+                        .style("margin-top", `${-2 * marginT}px`);
+                    if (rotVal < this.degree180) {
+                        this.finalTextContainer
+                            .style("margin-left", `${-marginL}px`);
+                    } else {
+                        this.finalTextContainer
+                            .style("margin-left", `${marginL}px`);
+                    }
+                }
+                               break;
+                default: break;
+            }
+        }
+
+        /**
+         * Method to handle text overflow in the bottom
+         * @param {number} textRotationVal          - Variable to store the rotational value of the text
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         * @param {number} textHeight           - variable that stores the text height
+         * @param {number} textWidth            - variable that stores the text width
+         *                                        where text settings aligment is not centre
+         * @param {number} textWidth2           - variable that stores the text width
+         *                                        where text settings aligment is centre
+         */
+        public textOverflowBottom(
+            textRotationVal: number,
+            textSettings: ITextSettings,
+            textHeight: number,
+            textWidth: number,
+            textWidth2: number): void {
+            const upper = 100;
+            switch (textSettings.direction) {
+                case "horizontal-tb": {
+                    let buffer: number = 0;
+                    let rotVal: number = textRotationVal > 0 ?
+                        textRotationVal : -textRotationVal;
+                    textRotationVal = textRotationVal > 0 ? textRotationVal % this.degree180 :
+                        (-textRotationVal) % this.degree180;
+                    rotVal = rotVal % this.degree360;
+                    if (rotVal < this.degree180) {
+                        buffer = (rotVal / upper * 2) * textSettings.fontSize;
+                    } else {
+                        buffer = ((this.degree360 - rotVal) / upper * 2) * textSettings.fontSize;
+                    }
+                    if (textSettings.alignment !== "center") {
+                        this.finalTextContainer
+                            .style("margin-top", `${(-((textWidth / 2) * Math.sin(
+                                this.toRadians(textRotationVal)) + buffer))}px`);
+                    } else {
+                        this.finalTextContainer
+                            .style("margin-top", `${(-((textWidth2 / 2) * Math.sin(
+                                this.toRadians(textRotationVal)) + buffer))}px`);
+                    }
+                }
+                                      break;
+                case "horizontal-bt": {
+                    let buffer: number = 0;
+                    textRotationVal = textRotationVal - this.degree180;
+                    const rotVal: number = textRotationVal > 0 ?
+                        textRotationVal : -textRotationVal;
+                    textRotationVal = textRotationVal > 0 ? textRotationVal % this.degree180 :
+                        (-textRotationVal) % this.degree180;
+                    if (rotVal < this.degree180) {
+                        buffer = (rotVal / upper * 2) * textSettings.fontSize;
+                    } else {
+                        buffer = ((this.degree360 - rotVal) / upper * 2) * textSettings.fontSize;
+                    }
+
+                    if (textSettings.alignment !== "center") {
+                        this.finalTextContainer
+                            .style("margin-top", `${(-((textWidth / 2) *
+                                Math.sin(this.toRadians(textRotationVal)) + buffer))}px`);
+                    } else {
+                        this.finalTextContainer
+                            .style("margin-top", `${(-((textWidth2 / 2) *
+                                Math.sin(this.toRadians(textRotationVal)) + buffer))}px`);
+                    }
+                }
+                                      break;
+                case "vertical-rl": {
+                    this.textOverflowBottomRL(textRotationVal, textSettings, textHeight);
+                }                   break;
+                case "vertical-lr": {
+                    this.textOverflowBottomLR(textRotationVal, textSettings, textHeight);
+                }                   break;
+                default: break;
+            }
+        }
+
+        /**
+         * Method to handle text overflow
+         * @param {number} textRotationVal          - Variable to store the rotational value of the text
+         * @param {ITextSettings} textSettings      - variable that stores the different
+         *                                            configurations that are available on the text
+         * @param {JQuery<HTMLElement>} dynamicText - variable that stores the dynamic text
+         * @param {JQuery<HTMLElement>} twFinalText - variable that stores the final text
+         */
+        public textOverflow(
+            textRotationVal: number,
+            textSettings: ITextSettings,
+            dynamicText: JQuery<HTMLElement>,
+            twFinalText: JQuery<HTMLElement>): void {
+            const upper = 100;
+            if (textRotationVal !== 0) {
+                const textWidth: number = twFinalText.width();
+                const textWidth2: number = $(".staticText").width() + dynamicText.width() +
+                    $(".dynamicpluscolon").width();
+                const textHeight: number = twFinalText.height();
+                switch (textSettings.alignmentV) {
+                    case "top": {
+                        switch (textSettings.direction) {
+                            case "horizontal-tb": {
+                                textRotationVal = textRotationVal > 0 ?
+                                    textRotationVal % this.degree180 :
+                                    (-textRotationVal) % this.degree180;
+                                if (textSettings.alignment !== "center") {
+                                    this.finalTextContainer
+                                        .style("margin-top", `${((textWidth / 2)
+                                            * Math.sin(this.toRadians(textRotationVal)))}px`);
+                                } else {
+                                    this.finalTextContainer
+                                        .style("margin-top", `${((textWidth2 / 2)
+                                            * Math.sin(this.toRadians(textRotationVal)))}px`);
+                                }
+                            }
+                                                  break;
+                            case "horizontal-bt": {
+                                textRotationVal = textRotationVal > 0 ?
+                                    textRotationVal % this.degree180 :
+                                    (-textRotationVal) % this.degree180;
+                                if (textSettings.alignment !== "center") {
+                                    this.finalTextContainer.style("margin-top",
+                                        `${((textWidth / 2) *
+                                            Math.sin(this.toRadians(textRotationVal)))}px`);
+                                } else {
+                                    this.finalTextContainer
+                                        .style("margin-top", `${((textWidth2 / 2)
+                                            * Math.sin(this.toRadians(textRotationVal)))}px`);
+                                }
+                            }
+                                                  break;
+                            case "vertical-rl": {
+                                let buffer: number = 0;
+                                let rotVal: number
+                                    = textRotationVal > 0 ? textRotationVal : -textRotationVal;
+                                textRotationVal = textRotationVal > 0 ?
+                                    textRotationVal % this.degree180 :
+                                    (-textRotationVal) % this.degree180;
+                                rotVal = rotVal % this.degree360;
+                                if (rotVal < this.degree180) {
+                                    buffer = (rotVal / upper * 2) * textSettings.fontSize;
+                                } else {
+                                    buffer = ((this.degree360 - rotVal) / upper * 2)
+                                        * textSettings.fontSize;
+                                }
+                                if (textSettings.alignment === "left") {
+                                    this.finalTextContainer
+                                        .style("margin-left", `${((textHeight / 2)
+                                            * Math.sin(this.toRadians(textRotationVal)))}px`);
+                                } else if (textSettings.alignment === "right") {
+                                    this.finalTextContainer
+                                        .style("margin-left", `${-((textHeight / 2) *
+                                            Math.sin(this.toRadians(textRotationVal)) + buffer)}px`);
+                                }
+                            }
+                                                break;
+                            case "vertical-lr": {
+                                let buffer: number = 0;
+                                textRotationVal = textSettings.alignment === "right" ?
+                                    textRotationVal - this.degree180 : textRotationVal;
+                                let rotVal: number =
+                                    textRotationVal > 0 ? textRotationVal : -textRotationVal;
+                                textRotationVal = textRotationVal > 0 ?
+                                    textRotationVal % this.degree180 :
+                                    (-textRotationVal) % this.degree180;
+                                rotVal = rotVal % this.degree360;
+                                if (rotVal < this.degree180) {
+                                    buffer = (rotVal / upper * 2) * textSettings.fontSize;
+                                } else {
+                                    buffer = ((this.degree360 - rotVal) / upper * 2)
+                                        * textSettings.fontSize;
+                                }
+                                if (textSettings.alignment === "left") {
+                                    this.finalTextContainer
+                                        .style("margin-left", `${((textHeight / 2) *
+                                            Math.sin(this.toRadians(textRotationVal)))}px`);
+                                } else if (textSettings.alignment === "right") {
+                                    this.finalTextContainer
+                                        .style("margin-left", `${-((textHeight / 2) *
+                                            Math.sin(this.toRadians(textRotationVal)) + buffer)}px`);
+                                }
+                            }
+                                                break;
+                            default: break;
+                        }
+                    }
+                                break;
+                    case "middle": {
+                        this.textOverflowMiddle(textRotationVal, textSettings, textHeight, textWidth);
+                    }
+                                   break;
+                    case "bottom": {
+                        this.textOverflowBottom(textRotationVal, textSettings, textHeight, textWidth, textWidth2);
+                    }              break;
+                    default: break;
+                }
+            }
+        }
+
+        /**
+         * Method that returns default text settings
+         */
         public getDefaultTextSettings(): ITextSettings {
             return {
                 alignment: "left",
                 alignmentV: "top",
-                color: "#000000",
+                color: "#000",
                 direction: "horizontal-tb",
                 fontSize: 18,
                 letterSpacing: null,
@@ -1528,27 +1825,34 @@ module powerbi.extensibility.visual {
                 textIndent: null,
                 textRotate: null,
                 transparency: null,
-                wordSpacing: null
+                wordSpacing: null,
             };
         }
 
+        /**
+         * Method that returns text settings
+         * @param {DataView} dataView              - the dataview object, which contains all
+         *                                           data needed to render the visual.
+         */
         public getTextSettings(dataView: DataView): ITextSettings {
             let objects: DataViewObjects = null;
             const textSetting: ITextSettings = this.getDefaultTextSettings();
             if (!dataView || !dataView.metadata || !dataView.metadata.objects) {
                 return textSetting;
             }
+            const upper = 100;
+            const lower = -3;
             objects = dataView.metadata.objects;
             textSetting.color = DataViewObjects.getFillColor(objects,
                 questTextProperties.textSettings.color, textSetting.color);
             textSetting.transparency = DataViewObjects.getValue(objects, questTextProperties.textSettings.transparency,
-                                                                textSetting.transparency) == null ?
+                textSetting.transparency) === null ?
                 null : (DataViewObjects.getValue(objects,
-                    questTextProperties.textSettings.transparency, textSetting.transparency) > 100 ?
-                    100 : (DataViewObjects.getValue(objects,
-                        questTextProperties.textSettings.transparency, textSetting.transparency) < 0 ?
-                        0 : DataViewObjects.getValue(objects,
-                            questTextProperties.textSettings.transparency, textSetting.transparency)
+                    questTextProperties.textSettings.transparency, textSetting.transparency) > upper ?
+                    100 : (DataViewObjects.getValue(
+                        objects, questTextProperties.textSettings.transparency, textSetting.transparency) < 0 ?
+                        0 : DataViewObjects.getValue(
+                            objects, questTextProperties.textSettings.transparency, textSetting.transparency)
                     ));
             textSetting.fontSize = DataViewObjects.getValue(objects,
                 questTextProperties.textSettings.fontSize, textSetting.fontSize);
@@ -1558,35 +1862,69 @@ module powerbi.extensibility.visual {
                 questTextProperties.textSettings.alignmentV, textSetting.alignmentV);
             textSetting.direction = DataViewObjects.getValue(objects,
                 questTextProperties.textSettings.direction, textSetting.direction);
-            textSetting.letterSpacing = DataViewObjects.getValue(objects,
-                questTextProperties.textSettings.letterSpacing, textSetting.letterSpacing);
-            textSetting.wordSpacing = DataViewObjects.getValue(objects, questTextProperties.textSettings.wordSpacing,
-                                                               textSetting.wordSpacing);
-            textSetting.lineHeight = DataViewObjects.getValue(objects,
-                questTextProperties.textSettings.lineHeight, textSetting.lineHeight);
-            textSetting.lineHeight = (textSetting.lineHeight == null || textSetting.lineHeight === 0) ?
-             null : (textSetting.lineHeight < 0 ? 0 : textSetting.lineHeight);
+            const letSpace = DataViewObjects.getValue(objects,
+                questTextProperties.textSettings.letterSpacing, textSetting.letterSpacing) < lower ?
+                lower : DataViewObjects.getValue(objects,
+                    questTextProperties.textSettings.letterSpacing, textSetting.letterSpacing) > upper / 2 ?
+                    upper / 2 : DataViewObjects.getValue(objects,
+                        questTextProperties.textSettings.letterSpacing, textSetting.letterSpacing);
+            textSetting.letterSpacing = letSpace;
+            const wordSpace = DataViewObjects.getValue(objects, questTextProperties.textSettings.wordSpacing,
+                textSetting.wordSpacing) < lower ?
+                lower : DataViewObjects.getValue(objects,
+                    questTextProperties.textSettings.wordSpacing, textSetting.wordSpacing) > upper / 2 ?
+                    upper / 2 : DataViewObjects.getValue(objects, questTextProperties.textSettings.wordSpacing,
+                        textSetting.wordSpacing);
+            textSetting.wordSpacing = wordSpace;
+            const lineHeight = DataViewObjects.getValue(objects,
+                questTextProperties.textSettings.lineHeight, textSetting.lineHeight) < 0 ?
+                0 : DataViewObjects.getValue(objects,
+                    questTextProperties.textSettings.lineHeight, textSetting.lineHeight) > upper / 2 ?
+                    upper / 2 : DataViewObjects.getValue(objects,
+                        questTextProperties.textSettings.lineHeight, textSetting.lineHeight);
+            textSetting.lineHeight = lineHeight;
             textSetting.perspective = DataViewObjects.getValue(objects, questTextProperties.textSettings.perspective,
-                                                               textSetting.perspective);
-            textSetting.perspective = textSetting.perspective == null ?
-            null : (textSetting.perspective < 0 ? 0 : textSetting.perspective);
-            textSetting.textIndent = DataViewObjects.getValue(objects,
-                questTextProperties.textSettings.textIndent, textSetting.textIndent);
-            textSetting.lineIndent = DataViewObjects.getValue(objects,
-                questTextProperties.textSettings.lineIndent, textSetting.lineIndent);
-            textSetting.textRotate = DataViewObjects.getValue(objects,
-                questTextProperties.textSettings.textRotate, textSetting.textRotate);
+                textSetting.perspective);
+            textSetting.perspective = textSetting.perspective === null ?
+                null : (textSetting.perspective < 0 ? 0 : textSetting.perspective);
+            const textIndent = DataViewObjects.getValue(objects,
+                questTextProperties.textSettings.textIndent, textSetting.textIndent) < -3 ?
+                -3 : DataViewObjects.getValue(objects,
+                    questTextProperties.textSettings.textIndent, textSetting.textIndent);
+            textSetting.textIndent = textIndent;
+            const lineIndent = DataViewObjects.getValue(objects,
+                questTextProperties.textSettings.lineIndent, textSetting.lineIndent) < 0 ?
+                0 : DataViewObjects.getValue(objects,
+                    questTextProperties.textSettings.lineIndent, textSetting.lineIndent);
+            textSetting.lineIndent = lineIndent;
+            const getSkew = DataViewObjects.getValue(objects,
+                questTextProperties.textSettings.textRotate, textSetting.textRotate) > this.degree360 ?
+                this.degree360 : DataViewObjects.getValue(objects,
+                    questTextProperties.textSettings.textRotate, textSetting.textRotate) < 0 ?
+                    0 : DataViewObjects.getValue(objects,
+                        questTextProperties.textSettings.textRotate, textSetting.textRotate);
+            textSetting.textRotate = getSkew;
             textSetting.skewX = DataViewObjects.getValue(objects,
-                questTextProperties.textSettings.skewX, textSetting.skewX);
+                questTextProperties.textSettings.skewX, textSetting.skewX) > this.degree360 ?
+                this.degree360 : DataViewObjects.getValue(objects,
+                    questTextProperties.textSettings.skewX, textSetting.skewX) < 0 ?
+                    0 : DataViewObjects.getValue(objects,
+                        questTextProperties.textSettings.skewX, textSetting.skewX);
             textSetting.skewY = DataViewObjects.getValue(objects,
-                questTextProperties.textSettings.skewY, textSetting.skewY);
-
+                questTextProperties.textSettings.skewY, textSetting.skewY) > this.degree360 ?
+                this.degree360 : DataViewObjects.getValue(objects,
+                    questTextProperties.textSettings.skewY, textSetting.skewY) < 0 ?
+                    0 : DataViewObjects.getValue(objects,
+                        questTextProperties.textSettings.skewY, textSetting.skewY);
             return textSetting;
         }
 
+        /**
+         * Method to set static text settings to default
+         */
         public getDefaultStaticTextSettings(): IStaticTextSettings {
             return {
-                backgroundcolor: "#ffffff",
+                backgroundColor: "#fff",
                 boldStyle: false,
                 fontFamily: "Segoe UI",
                 fontWeight: "normal",
@@ -1594,51 +1932,60 @@ module powerbi.extensibility.visual {
                 overline: false,
                 postText: "",
                 showColon: true,
-                strikethrough: false,
+                strikeThrough: false,
                 textDecoration: "none",
                 textPosition: "prefix",
                 textShadow: "none",
                 textShadowBlur: "low",
-                textShadowColor: "#000000",
+                textShadowColor: "#000",
                 textTransform: "",
                 transparency: null,
-                underline: false
+                underline: false,
             };
         }
 
+        /**
+         * Method to set dynamic text settings to default
+         */
         public getDefaultDynamicTextSettings(): IDynamicTextSettings {
             return {
-                backgroundcolor: "#FFF",
+                backgroundColor: "#FFF",
                 boldStyle: false,
                 fontFamily: "Segoe UI",
                 fontWeight: "normal",
                 italicStyle: false,
                 overline: false,
-                strikethrough: false,
+                strikeThrough: false,
                 textDecoration: "none",
                 textShadow: "none",
                 textShadowBlur: "low",
                 textShadowColor: "#000",
                 textTransform: "",
                 transparency: null,
-                underline: false
+                underline: false,
             };
         }
 
+        /**
+         * Method to get Dynamic text settings
+         * @param {DataView} dataView          - the dataview object, which contains all
+         *                                       data needed to render the visual.
+         */
         public getDynamicTextSettings(dataView: DataView): IDynamicTextSettings {
             let objects: DataViewObjects = null;
             const dynamicSettings: IDynamicTextSettings = this.getDefaultDynamicTextSettings();
             if (!dataView || !dataView.metadata || !dataView.metadata.objects) {
                 return dynamicSettings;
             }
+            const upper = 100;
             objects = dataView.metadata.objects;
-            dynamicSettings.backgroundcolor = DataViewObjects.getFillColor(
-                objects, questTextProperties.dynamicSettings.backgroundcolor, dynamicSettings.backgroundcolor);
+            dynamicSettings.backgroundColor = DataViewObjects.getFillColor(
+                objects, questTextProperties.dynamicSettings.backgroundColor, dynamicSettings.backgroundColor);
             dynamicSettings.transparency = DataViewObjects.getValue(
                 objects, questTextProperties.dynamicSettings.transparency,
-                dynamicSettings.transparency == null ? 0 : (DataViewObjects.getValue(
-                    objects, questTextProperties.dynamicSettings.transparency, dynamicSettings.transparency) > 100 ?
-                    100 : (DataViewObjects.getValue(
+                dynamicSettings.transparency === null ? 0 : (DataViewObjects.getValue(
+                    objects, questTextProperties.dynamicSettings.transparency, dynamicSettings.transparency) > upper ?
+                    upper : (DataViewObjects.getValue(
                         objects, questTextProperties.dynamicSettings.transparency, dynamicSettings.transparency) < 0 ?
                         0 : DataViewObjects.getValue(
                             objects, questTextProperties.dynamicSettings.transparency, dynamicSettings.transparency)
@@ -1665,18 +2012,23 @@ module powerbi.extensibility.visual {
                 objects, questTextProperties.dynamicSettings.underline, dynamicSettings.underline);
             dynamicSettings.overline = DataViewObjects.getValue(
                 objects, questTextProperties.dynamicSettings.overline, dynamicSettings.overline);
-            dynamicSettings.strikethrough = DataViewObjects.getValue(
-                objects, questTextProperties.dynamicSettings.strikethrough, dynamicSettings.strikethrough);
-
+            dynamicSettings.strikeThrough = DataViewObjects.getValue(
+                objects, questTextProperties.dynamicSettings.strikeThrough, dynamicSettings.strikeThrough);
             return dynamicSettings;
         }
 
+        /**
+         * Method to get static text settings
+         * @param {DataView} dataView          - the dataview object, which contains all
+         *                                       data needed to render the visual.
+         */
         public getStaticTextSettings(dataView: DataView): IStaticTextSettings {
             let objects: DataViewObjects = null;
             const textSetting: IStaticTextSettings = this.getDefaultStaticTextSettings();
             if (!dataView || !dataView.metadata || !dataView.metadata.objects) {
                 return textSetting;
             }
+            const upper = 100;
             objects = dataView.metadata.objects;
             textSetting.showColon = DataViewObjects.getValue(
                 objects, questTextProperties.staticTextSettings.showColon, textSetting.showColon);
@@ -1694,16 +2046,22 @@ module powerbi.extensibility.visual {
                 objects, questTextProperties.staticTextSettings.textShadowColor, textSetting.textShadowColor);
             textSetting.fontWeight = DataViewObjects.getValue(
                 objects, questTextProperties.staticTextSettings.fontWeight, textSetting.fontWeight);
-            textSetting.backgroundcolor = DataViewObjects.getFillColor(
-                objects, questTextProperties.staticTextSettings.backgroundcolor, textSetting.backgroundcolor);
+            textSetting.backgroundColor = DataViewObjects.getFillColor(
+                objects, questTextProperties.staticTextSettings.backgroundColor, textSetting.backgroundColor);
             textSetting.transparency = DataViewObjects.getValue(
-                objects, questTextProperties.staticTextSettings.transparency, textSetting.transparency == null ?
+                objects, questTextProperties.staticTextSettings.transparency, textSetting.transparency === null ?
                 null : (DataViewObjects.getValue(
-                    objects, questTextProperties.staticTextSettings.transparency, textSetting.transparency) > 100 ?
-                    100 : (DataViewObjects.getValue(
-                        objects, questTextProperties.staticTextSettings.transparency, textSetting.transparency) < 0 ?
-                        0 : DataViewObjects.getValue(
-                            objects, questTextProperties.staticTextSettings.transparency, textSetting.transparency)
+                    objects,
+                    questTextProperties.staticTextSettings.transparency,
+                    textSetting.transparency) > upper ? upper
+                    : (DataViewObjects.getValue(
+                        objects,
+                        questTextProperties.staticTextSettings.transparency,
+                        textSetting.transparency) < 0 ? 0
+                    : DataViewObjects.getValue(
+                        objects,
+                        questTextProperties.staticTextSettings.transparency,
+                        textSetting.transparency)
                     )
                 ));
             textSetting.fontFamily = DataViewObjects.getValue(
@@ -1716,16 +2074,21 @@ module powerbi.extensibility.visual {
                 objects, questTextProperties.staticTextSettings.underline, textSetting.underline);
             textSetting.overline = DataViewObjects.getValue(
                 objects, questTextProperties.staticTextSettings.overline, textSetting.overline);
-            textSetting.strikethrough = DataViewObjects.getValue(
-                objects, questTextProperties.staticTextSettings.strikethrough, textSetting.strikethrough);
+            textSetting.strikeThrough = DataViewObjects.getValue(
+                objects, questTextProperties.staticTextSettings.strikeThrough, textSetting.strikeThrough);
             textSetting.postText = DataViewObjects.getValue(
                 objects, questTextProperties.staticTextSettings.postText, textSetting.postText);
-
             return textSetting;
         }
-        // tslint:disable: object-literal-sort-keys
+
+        /**
+         * This function gets called for each of the
+         * objects defined in the capabilities files and allows you to select which of the
+         * objects and properties you want to expose to the users in the property pane.
+         * @param {EnumerateVisualObjectInstancesOptions} options       - Map of defined objects
+         */
         public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions):
-        VisualObjectInstanceEnumeration {
+            VisualObjectInstanceEnumeration {
             const textSetting: ITextSettings = this.getTextSettings(this.dataViews);
             const objectName: string = options.objectName;
             const objectEnumeration: VisualObjectInstance[] = [];
@@ -1734,74 +2097,67 @@ module powerbi.extensibility.visual {
                     objectEnumeration.push({
                         objectName,
                         properties: {
-                            color: textSetting.color,
-                            transparency: textSetting.transparency,
-                            fontSize: textSetting.fontSize,
                             alignment: textSetting.alignment,
-                            textIndent: textSetting.textIndent,
                             alignmentV: textSetting.alignmentV,
-                            lineIndent: textSetting.lineIndent,
+                            color: textSetting.color,
                             direction: textSetting.direction,
-                            lineHeight: textSetting.lineHeight,
+                            fontSize: textSetting.fontSize,
                             letterSpacing: textSetting.letterSpacing,
-                            wordSpacing: textSetting.wordSpacing,
+                            lineHeight: textSetting.lineHeight,
+                            lineIndent: textSetting.lineIndent,
                             perspective: textSetting.perspective,
-                            textRotate: textSetting.textRotate,
                             skewX: textSetting.skewX,
-                            skewY: textSetting.skewY
-
+                            skewY: textSetting.skewY,
+                            textIndent: textSetting.textIndent,
+                            textRotate: textSetting.textRotate,
+                            transparency: textSetting.transparency,
+                            wordSpacing: textSetting.wordSpacing,
                         },
                         selector: null,
-
                     });
                     break;
                 case "staticText":
                     if (this.staticTextSettings.textShadow === "none") {
                         objectEnumeration.push({
                             objectName,
-                            properties: {
-                                  // This field to keep it compatible with the older version. DO NOT DELETE.
-                                  textPosition: this.staticTextSettings.textPosition,
-                                  postText: this.staticTextSettings.postText,
-                                  showColon: this.staticTextSettings.showColon,
-                                  backgroundcolor: this.staticTextSettings.backgroundcolor,
-                                  transparency: this.staticTextSettings.transparency,
-                                  textTransform: this.staticTextSettings.textTransform,
-                                  textShadow: this.staticTextSettings.textShadow,
-                                  fontFamily: this.staticTextSettings.fontFamily,
-                                  boldStyle: this.staticTextSettings.boldStyle,
-                                  italicStyle: this.staticTextSettings.italicStyle,
-                                  underline: this.staticTextSettings.underline,
-                                  overline: this.staticTextSettings.overline,
-                                  strikethrough: this.staticTextSettings.strikethrough
+                            properties: {// This field to keep it compatible with the older version. DO NOT DELETE.
+                                backgroundColor: this.staticTextSettings.backgroundColor,
+                                boldStyle: this.staticTextSettings.boldStyle,
+                                fontFamily: this.staticTextSettings.fontFamily,
+                                italicStyle: this.staticTextSettings.italicStyle,
+                                overline: this.staticTextSettings.overline,
+                                postText: this.staticTextSettings.postText,
+                                showColon: this.staticTextSettings.showColon,
+                                strikeThrough: this.staticTextSettings.strikeThrough,
+                                textPosition: this.staticTextSettings.textPosition,
+                                textShadow: this.staticTextSettings.textShadow,
+                                textTransform: this.staticTextSettings.textTransform,
+                                transparency: this.staticTextSettings.transparency,
+                                underline: this.staticTextSettings.underline,
                             },
                             selector: null,
-
                         });
                     } else {
                         objectEnumeration.push({
                             objectName,
-                            properties: {
-                                // This field to keep it compatible with the older version. DO NOT DELETE.
-                                textPosition: this.staticTextSettings.textPosition,
+                            properties: {// This field to keep it compatible with the older version. DO NOT DELETE.
+                                backgroundColor: this.staticTextSettings.backgroundColor,
+                                boldStyle: this.staticTextSettings.boldStyle,
+                                fontFamily: this.staticTextSettings.fontFamily,
+                                italicStyle: this.staticTextSettings.italicStyle,
+                                overline: this.staticTextSettings.overline,
                                 postText: this.staticTextSettings.postText,
                                 showColon: this.staticTextSettings.showColon,
-                                backgroundcolor: this.staticTextSettings.backgroundcolor,
-                                transparency: this.staticTextSettings.transparency,
-                                textTransform: this.staticTextSettings.textTransform,
+                                strikeThrough: this.staticTextSettings.strikeThrough,
+                                textPosition: this.staticTextSettings.textPosition,
                                 textShadow: this.staticTextSettings.textShadow,
                                 textShadowBlur: this.staticTextSettings.textShadowBlur,
                                 textShadowColor: this.staticTextSettings.textShadowColor,
-                                fontFamily: this.staticTextSettings.fontFamily,
-                                boldStyle: this.staticTextSettings.boldStyle,
-                                italicStyle: this.staticTextSettings.italicStyle,
+                                textTransform: this.staticTextSettings.textTransform,
+                                transparency: this.staticTextSettings.transparency,
                                 underline: this.staticTextSettings.underline,
-                                overline: this.staticTextSettings.overline,
-                                strikethrough: this.staticTextSettings.strikethrough
                             },
-                            selector: null,
-
-                        });
+                            selector: null });
                     }
                     break;
                 case "Settings":
@@ -1809,40 +2165,34 @@ module powerbi.extensibility.visual {
                         objectEnumeration.push({
                             objectName,
                             properties: {
-                                backgroundcolor: this.dynamicSettings.backgroundcolor,
-                                transparency: this.dynamicSettings.transparency,
-                                textTransform: this.dynamicSettings.textTransform,
-                                textShadow: this.dynamicSettings.textShadow,
-                                fontFamily: this.dynamicSettings.fontFamily,
+                                backgroundColor: this.dynamicSettings.backgroundColor,
                                 boldStyle: this.dynamicSettings.boldStyle,
+                                fontFamily: this.dynamicSettings.fontFamily,
                                 italicStyle: this.dynamicSettings.italicStyle,
-                                underline: this.dynamicSettings.underline,
                                 overline: this.dynamicSettings.overline,
-                                strikethrough: this.dynamicSettings.strikethrough
-                            },
-                            selector: null,
-
-                        });
+                                strikeThrough: this.dynamicSettings.strikeThrough,
+                                textShadow: this.dynamicSettings.textShadow,
+                                textTransform: this.dynamicSettings.textTransform,
+                                transparency: this.dynamicSettings.transparency,
+                                underline: this.dynamicSettings.underline },
+                            selector: null });
                     } else {
                         objectEnumeration.push({
                             objectName,
                             properties: {
-                                backgroundcolor: this.dynamicSettings.backgroundcolor,
-                                transparency: this.dynamicSettings.transparency,
-                                textTransform: this.dynamicSettings.textTransform,
+                                backgroundColor: this.dynamicSettings.backgroundColor,
+                                boldStyle: this.dynamicSettings.boldStyle,
+                                fontFamily: this.dynamicSettings.fontFamily,
+                                italicStyle: this.dynamicSettings.italicStyle,
+                                overline: this.dynamicSettings.overline,
+                                strikeThrough: this.dynamicSettings.strikeThrough,
                                 textShadow: this.dynamicSettings.textShadow,
                                 textShadowBlur: this.dynamicSettings.textShadowBlur,
                                 textShadowColor: this.dynamicSettings.textShadowColor,
-                                fontFamily: this.dynamicSettings.fontFamily,
-                                boldStyle: this.dynamicSettings.boldStyle,
-                                italicStyle: this.dynamicSettings.italicStyle,
-                                underline: this.dynamicSettings.underline,
-                                overline: this.dynamicSettings.overline,
-                                strikethrough: this.dynamicSettings.strikethrough
-                            },
-                            selector: null,
-
-                        });
+                                textTransform: this.dynamicSettings.textTransform,
+                                transparency: this.dynamicSettings.transparency,
+                                underline: this.dynamicSettings.underline },
+                            selector: null });
                     }
                     break;
                 default: break;
@@ -1850,52 +2200,104 @@ module powerbi.extensibility.visual {
 
             return objectEnumeration;
         }
-        /*tslint:enable*/
 
-        private getTexts(text: string, fontStyleClass: string, textDecoration: string, textFontSize: number,
-                         textFontFamily: string, backgroundcolor: string, textTrans: string, statictextShadow: string,
-                         statictextShadowBlur: string, statictextShadowColor: string, fontWeight: string): void {
+        /**
+         * Method to get final static text
+         * @param text                 - variable to store the final text
+         * @param fontStyleClass       - variable that holds the font class of the text
+         * @param textDecoration       - variable that holds the decoration property of the text
+         * @param textFontSize         - variable that stores the font size of the text
+         * @param textFontFamily       - variable that stores the font family of the text
+         * @param backgroundColor      - variable that stores the background color information
+         * @param textTrans            - variable that stores the transperancy value of the text
+         * @param staticTextShadow     - variable that stores the text shadow value of the static text
+         * @param staticTextShadowBlur - variable that stores the text shadow blur value of the static text
+         * @param staticTextShadowColor - variable that stores the text shadow color value of the static text
+         * @param fontWeight           - variable that stores the value of font weight
+         */
+        private getTexts(
+            text: string,
+            fontStyleClass: string,
+            textDecoration: string,
+            textFontSize: number,
+            textFontFamily: string,
+            backgroundColor: string,
+            textTrans: string,
+            staticTextShadow: string,
+            staticTextShadowBlur: string,
+            staticTextShadowColor: string,
+            fontWeight: string): void {
             this.finalTextContainer.append("span")
                 .classed("staticText", true)
                 .text(text)
                 .classed(fontStyleClass, true)
                 .style("font-size", this.pointToPixel(textFontSize))
                 .style("font-family", textFontFamily)
-                .style("background-color", backgroundcolor +
-                this.getOpacityHex(this.staticTextSettings.transparency == null
-                     ? 0 : this.staticTextSettings.transparency))
+                .style("background-color", backgroundColor +
+                    this.getOpacityHex(this.staticTextSettings.transparency === null
+                        ? 0 : this.staticTextSettings.transparency))
                 .style("text-decoration", textDecoration)
-                .style("text-shadow", this.getTextShadow(statictextShadow, statictextShadowBlur, statictextShadowColor))
+                .style("text-shadow", this.getTextShadow(staticTextShadow, staticTextShadowBlur, staticTextShadowColor))
                 .style("font-weight", fontWeight)
                 .style("text-transform", textTrans)
                 .style("border-radius", "5px");
         }
 
-        private getText(text: string, fontStyleClass: string, textDecoration: string, textFontSize: number,
-                        dyntextShadow: string, dyntextShadowBlur: string, dyntextShadowColor: string,
-                        textFontFamily: string, backgroundcolor: string, fontWeight: string, textTransD: string): void {
+        /**
+         * Method to get final dynamic text
+         * @param text              - variable to store the final text
+         * @param fontStyleClass    - variable that holds the font class of the text
+         * @param textDecoration    - variable that holds the decoration property of the text
+         * @param textFontSize      - variable that stores the font size of the text
+         * @param dynTextShadow     - variable that stores the text shadow value of the dynamic text
+         * @param dynTextShadowBlur - variable that stores the text shadow color value of the dynamic text
+         * @param dynTextShadowColor - variable that stores the text shadow color value of the dynamic text
+         * @param textFontFamily     - variable that stores the font family of the text
+         * @param backgroundColor    - variable that stores the background color information
+         * @param fontWeight         - variable that stores the value of font weight
+         * @param textTransD         - variable that stores the transperancy value of the dynamic text
+         */
+        private getText(
+            text: string,
+            fontStyleClass: string,
+            textDecoration: string,
+            textFontSize: number,
+            dynTextShadow: string,
+            dynTextShadowBlur: string,
+            dynTextShadowColor: string,
+            textFontFamily: string,
+            backgroundColor: string,
+            fontWeight: string,
+            textTransD: string): void {
             this.finalTextContainer.append("span")
                 .classed("dynamicText", true)
                 .text(text)
                 .classed(fontStyleClass, true)
                 .style("font-size", this.pointToPixel(textFontSize))
                 .style("font-family", textFontFamily)
-                .style("text-shadow", this.getTextShadow(dyntextShadow, dyntextShadowBlur, dyntextShadowColor))
+                .style("text-shadow", this.getTextShadow(dynTextShadow, dynTextShadowBlur, dynTextShadowColor))
                 .style("font-weight", fontWeight)
-                .style("background-color", backgroundcolor +
-                this.getOpacityHex(this.dynamicSettings.transparency == null
-                     ? 0 : this.dynamicSettings.transparency))
+                .style("background-color", backgroundColor +
+                    this.getOpacityHex(this.dynamicSettings.transparency === null
+                        ? 0 : this.dynamicSettings.transparency))
                 .style("text-decoration", textDecoration)
                 .style("text-transform", textTransD)
                 .style("border-radius", "5px");
         }
 
+        /**
+         * Method to add colon to the final text
+         * @param colonText   - variable on which the colon is to be added
+         */
         private colonText(colonText: string): void {
             this.finalTextContainer.append("span")
                 .classed("dynamicpluscolon", true)
                 .text(colonText);
         }
 
+        /**
+         * Method to add space to the final text
+         */
         private addSpace(): void {
             this.finalTextContainer.append("span")
                 .classed("space", true)
