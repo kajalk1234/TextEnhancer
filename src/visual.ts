@@ -248,7 +248,9 @@ module powerbi.extensibility.visual {
 
     questTextProperties = {
         dynamicSettings: {
-            backgroundColor: { objectName: "Settings" } as DataViewObjectPropertyIdentifier,
+            backgroundColor: {
+                objectName: "Settings",
+                propertyName: "backgroundColor" } as DataViewObjectPropertyIdentifier,
             boldStyle: { objectName: "Settings", propertyName: "boldStyle" } as DataViewObjectPropertyIdentifier,
             fontFamily: { objectName: "Settings", propertyName: "fontFamily" } as DataViewObjectPropertyIdentifier,
             fontWeight: { objectName: "Settings", propertyName: "fontWeight" } as DataViewObjectPropertyIdentifier,
@@ -353,13 +355,15 @@ module powerbi.extensibility.visual {
         private degree180: number = 180;
         private degree90: number = 90;
         private degree270: number = 270;
+        private categoriesValues;
+
         constructor(options: VisualConstructorOptions) {
             this.visualHost = options.host;
             this.eventService = options.host.eventService;
             this.target = d3.select(options.element);
             this.target.style({
-                "cursor": "default",
-                "overflow-y": "auto" });
+                cursor: "default",
+            });
         }
 
         /**
@@ -499,7 +503,7 @@ module powerbi.extensibility.visual {
          * @param {number} sk        - variable that stores the skewness value of the text
          */
         public getSkew(sk: number): string {
-            sk = sk === null ? 0 : (sk > this.degree360) ? this.degree360 : sk < 0 ? 0 : sk;
+            sk = sk === null ? 0 : (sk > this.degree360) ? this.degree360 : sk;
             const pixelString: string = "deg";
 
             return sk + pixelString;
@@ -516,9 +520,9 @@ module powerbi.extensibility.visual {
 
         /**
          * Method that counts Decimal places
-         * @param {any} value         - variable to store the number of decimal places
+         * @param {number} value         - variable to store the number of decimal places
          */
-        public getDecimalPlacesCount(value: any): number {
+        public getDecimalPlacesCount(value: number): number {
             let decimalPlaces: number = 0;
             if (value > 0) {
                 const arr: string[] = value.toString().split(".");
@@ -535,14 +539,14 @@ module powerbi.extensibility.visual {
          *                                      all data needed to render the visual.
          */
         public getDynamicTextValue(dataView: DataView): IDynamicTextContainer {
-            let textValDynamicInput: any;
+            let textValDynamicInput: string;
             let valueLength: number = 0;
             const categorical = dataView.categorical;
             if (dataView && categorical) {
                 if (categorical.categories && categorical.categories[0] &&
                     categorical.categories[0].values) {
                     valueLength = categorical.categories[0].values.length;
-                    textValDynamicInput = valueLength ? categorical.categories[0].values[0] : "(blank)";
+                    textValDynamicInput = (valueLength ? categorical.categories[0].values[0] : "(Blank)").toString();
                     if (categorical.categories[0].source && categorical.categories[0].source.format) {
                         const formatter: utils.formatting.IValueFormatter = valueFormatter.create({
                             format: categorical.categories[0].source.format });
@@ -551,12 +555,12 @@ module powerbi.extensibility.visual {
                 } else if (categorical.values && categorical.values[0] &&
                     categorical.values[0].values) {
                     valueLength = categorical.values[0].values.length;
-                    textValDynamicInput = categorical.values[0].values[0] ?
-                        categorical.values[0].values[0] : 0;
+                    textValDynamicInput = (categorical.values[0].values[0] ?
+                        categorical.values[0].values[0] : 0).toString();
                     const upper = 4;
                     if (categorical.values[0] && categorical.values[0].source
                         && categorical.values[0].source.format) {
-                        let decimalPlaces: number = this.getDecimalPlacesCount(textValDynamicInput);
+                        let decimalPlaces: number = this.getDecimalPlacesCount(parseInt(textValDynamicInput, 10));
                         decimalPlaces = decimalPlaces > upper ? upper : decimalPlaces;
                         const formatter: utils.formatting.IValueFormatter = valueFormatter.create({
                             format: categorical.values[0].source.format, precision: decimalPlaces, value: 1 });
@@ -783,30 +787,32 @@ module powerbi.extensibility.visual {
          * @param propVal                   - variable to store the property value
          * @param paddingType               - variable that stores the padding type value
          */
-        public textSettingsVerticalMiddle(caseVertical, textSettings, transformed, propVal, paddingType) {
+        public textSettingsVerticalMiddle(caseVertical, textSettings, propVal, paddingType) {
+            let transformed;
             if (textSettings.alignment === "center") {
-                transformed = caseVertical === "vertical-lr" ? `${propVal}  translate(-50%, -50%)`
+                transformed = caseVertical === "vertical-rl" ? `${propVal}  translate(-50%, -50%)`
                                                              : `${propVal}  translate(50%, 50%)`;
-                paddingType = caseVertical === "vertical-lr" ? textSettings.lineIndent >= 0 ?
+                paddingType = caseVertical === "vertical-rl" ? textSettings.lineIndent >= 0 ?
                 "padding-right" : "padding-left" : textSettings.lineIndent >= 0 ?
                 "padding-left" : "padding-right";
                 this.finalTextContainer = this.finalTextContainer
                     .style("left", "50%");
             } else if (textSettings.alignment === "right") {
-                transformed = caseVertical === "vertical-lr" ? `${propVal}  translate(-100%, -50%)`
+                transformed = caseVertical === "vertical-rl" ? `${propVal}  translate(-100%, -50%)`
                                                              : `${propVal}  translate(100%, 50%)`;
-                paddingType = caseVertical === "vertical-lr" ? textSettings.lineIndent >= 0 ?
+                paddingType = caseVertical === "vertical-rl" ? textSettings.lineIndent >= 0 ?
                 "padding-right" : "padding-left" : textSettings.lineIndent >= 0 ?
                 "padding-left" : "padding-right";
                 this.finalTextContainer = this.finalTextContainer
                     .style("left", "100%");
             } else if (textSettings.alignment === "left") {
-                transformed = caseVertical === "vertical-lr" ? `${propVal}  translate(0%, -50%)`
+                transformed = caseVertical === "vertical-rl" ? `${propVal}  translate(0%, -50%)`
                                                              : `${propVal}  translate(0%, 50%)`;
-                paddingType = caseVertical === "vertical-lr" ? textSettings.lineIndent >= 0 ?
+                paddingType = caseVertical === "vertical-rl" ? textSettings.lineIndent >= 0 ?
                 "padding-right" : "padding-left" : textSettings.lineIndent >= 0 ?
                 "padding-left" : "padding-right";
             }
+            return [transformed, paddingType];
         }
 
         /**
@@ -824,7 +830,6 @@ module powerbi.extensibility.visual {
             const propVal: string = this.finalTextContainer.style("transform");
             positionName = "top";
             positionVal = "50%";
-            let caseVertical: string = "";
             switch (textSettings.direction) {
                 case "horizontal-tb": {
                     transformed = `${propVal}  translate(0%, -50%)`;
@@ -841,13 +846,17 @@ module powerbi.extensibility.visual {
                 }
                                       break;
                 case "vertical-rl": {
-                    caseVertical = "vertical-rl";
-                    this.textSettingsVerticalMiddle(caseVertical, textSettings, transformed, propVal, paddingType);
+                    let properties;
+                    properties = this.textSettingsVerticalMiddle("vertical-rl", textSettings, propVal, paddingType);
+                    transformed = properties[0];
+                    paddingType = properties[1];
                 }
                                     break;
                 case "vertical-lr": {
-                    caseVertical = "vertical-lr";
-                    this.textSettingsVerticalMiddle(caseVertical, textSettings, transformed, propVal, paddingType);
+                    let properties;
+                    properties = this.textSettingsVerticalMiddle("vertical-lr", textSettings, propVal, paddingType);
+                    transformed = properties[0];
+                    paddingType = properties[1];
                 }
                                     break;
                 default: break;
@@ -869,7 +878,8 @@ module powerbi.extensibility.visual {
          * @param propVal                   - variable to store the property value
          * @param paddingType               - variable that stores the padding type value
          */
-        public textSettingsVerticalBottom(caseVertical, textSettings, transformed, propVal, paddingType) {
+        public textSettingsVerticalBottom(caseVertical, textSettings, propVal, paddingType) {
+            let transformed;
             if (textSettings.alignment === "center") {
                 transformed = caseVertical === "vertical-rl" ? `${propVal}  translate(-50%, -100%)`
                                                              : `${propVal}  translate(50%, 100%)`;
@@ -893,6 +903,7 @@ module powerbi.extensibility.visual {
                     "padding-right" : "padding-left" : textSettings.lineIndent >= 0 ?
                     "padding-left" : "padding-right";
             }
+            return [transformed, paddingType];
         }
 
         /**
@@ -928,12 +939,18 @@ module powerbi.extensibility.visual {
                                       break;
                 case "vertical-rl": {
                     caseVertical = "vertical-rl";
-                    this.textSettingsVerticalBottom(caseVertical, textSettings, transformed, propVal, paddingType);
+                    let properties;
+                    properties = this.textSettingsVerticalBottom(caseVertical, textSettings, propVal, paddingType);
+                    transformed = properties[0];
+                    paddingType = properties[1];
                 }
                                     break;
                 case "vertical-lr": {
                     caseVertical = "vertical-lr";
-                    this.textSettingsVerticalBottom(caseVertical, textSettings, transformed, propVal, paddingType);
+                    let properties;
+                    properties = this.textSettingsVerticalBottom(caseVertical, textSettings, propVal, paddingType);
+                    transformed = properties[0];
+                    paddingType = properties[1];
                 }
                                     break;
                 default: break;
@@ -982,7 +999,7 @@ module powerbi.extensibility.visual {
         public handleHeightIssue(
             options: VisualUpdateOptions,
             dynamicText: JQuery<HTMLElement>,
-            url: any,
+            url: string,
             valueLength: number,
             textSettings: ITextSettings): void {
             const upper = 100;
@@ -1013,7 +1030,7 @@ module powerbi.extensibility.visual {
             const dataView: DataView = this.dataViews = options.dataViews[0];
             const spanHeight: number = dynamicText.height();
             $(".tw_value.tw_finalText").height(spanHeight + 2);
-            for (const jIterator of options.dataViews[0].categorical.categories) {
+            for (const jIterator of this.categoriesValues) {
                 if (jIterator.source.type[`category`] === "WebUrl" && jIterator.source.roles.URL) {
                     dynamicText.on("click", (): void => {
                         this.visualHost.launchUrl(url);
@@ -1021,7 +1038,7 @@ module powerbi.extensibility.visual {
                 }
             }
             if (dataView.categorical.categories !== undefined) {
-                for (const iterator of options.dataViews[0].categorical.categories) {
+                for (const iterator of this.categoriesValues) {
                     if (iterator.source.type[`category`]
                         === "WebUrl" && iterator.source.roles.URL) {
                         dynamicText.addClass("urlIcon");
@@ -1148,7 +1165,7 @@ module powerbi.extensibility.visual {
                 let textValDynamic: string = "";
                 valueLength = valuesContainer.lengthContainer;
                 if (valueLength === 1) { // Text Formatting
-                    const original: d3.Selection<HTMLElement> = this.target.append("div")
+                    this.target.append("div")
                         .classed("tw_value tw_finalText", true)
                         .style("font-size", this.pointToPixel(textFontSize))
                         .style("letter-spacing", this.letSpace(letSpacing))
@@ -1167,10 +1184,26 @@ module powerbi.extensibility.visual {
                     } else if (valueLength === 0) {
                         errMsg = "Query contains null value";
                     }
+                    this.target.append("div")
+                        .classed("tw_value errormsg", true).text(errMsg).attr("title", errMsg)
+                        .style("font-size", this.pointToPixel(textFontSize))
+                        .style("letter-spacing", this.letSpace(letSpacing))
+                        .style("word-spacing", this.getWordSpace(wordSpace))
+                        .style("line-height", this.getLineHeight(lHeight))
+                        .style("font-family", "Segoe UI Semibold")
+                        .style("color", "#777")
+                        .style("transform", this.getSkewString(textSkewX, textSkewY));
                 }
                 let url;
+                const categoricalValues = options.dataViews[0].categorical;
+                if (categoricalValues.categories !== undefined) {
+                    this.categoriesValues = options.dataViews[0].categorical.categories;
+                }
+                if (categoricalValues.values !== undefined) {
+                    this.categoriesValues = this.categoriesValues.concat(categoricalValues.values as any);
+                }
                 if (dataView.categorical.categories !== undefined) { // To check if url field exists
-                    for (const iterator of options.dataViews[0].categorical.categories) {
+                    for (const iterator of this.categoriesValues) {
                         if (iterator.source.type[`category`] === "WebUrl" && iterator.source.roles.URL) {
                             url = (iterator.values.toString());
                         }
@@ -1183,6 +1216,7 @@ module powerbi.extensibility.visual {
                         }
                     }
                 }// Text Direction
+
                 let textAlign: string = textSettings.alignment;
                 let writingMode: string = textSettings.direction;
                 switch (textSettings.direction) {
@@ -1460,7 +1494,6 @@ module powerbi.extensibility.visual {
                     marginL = (textHeight * rotValHei) / 2;
                 }
             }
-            this.finalTextContainer.style("margin-top", `${-2 * marginT}px`);
             if (caseLR === "left") {
                 this.finalTextContainer.style("margin-left", `${marginL}px`);
             } else if (caseLR === "right") {
@@ -1813,7 +1846,7 @@ module powerbi.extensibility.visual {
             return {
                 alignment: "left",
                 alignmentV: "top",
-                color: "#000",
+                color: "#000000",
                 direction: "horizontal-tb",
                 fontSize: 18,
                 letterSpacing: null,
@@ -1900,22 +1933,16 @@ module powerbi.extensibility.visual {
             const getSkew = DataViewObjects.getValue(objects,
                 questTextProperties.textSettings.textRotate, textSetting.textRotate) > this.degree360 ?
                 this.degree360 : DataViewObjects.getValue(objects,
-                    questTextProperties.textSettings.textRotate, textSetting.textRotate) < 0 ?
-                    0 : DataViewObjects.getValue(objects,
-                        questTextProperties.textSettings.textRotate, textSetting.textRotate);
+                    questTextProperties.textSettings.textRotate, textSetting.textRotate);
             textSetting.textRotate = getSkew;
             textSetting.skewX = DataViewObjects.getValue(objects,
                 questTextProperties.textSettings.skewX, textSetting.skewX) > this.degree360 ?
                 this.degree360 : DataViewObjects.getValue(objects,
-                    questTextProperties.textSettings.skewX, textSetting.skewX) < 0 ?
-                    0 : DataViewObjects.getValue(objects,
-                        questTextProperties.textSettings.skewX, textSetting.skewX);
+                    questTextProperties.textSettings.skewX, textSetting.skewX);
             textSetting.skewY = DataViewObjects.getValue(objects,
                 questTextProperties.textSettings.skewY, textSetting.skewY) > this.degree360 ?
                 this.degree360 : DataViewObjects.getValue(objects,
-                    questTextProperties.textSettings.skewY, textSetting.skewY) < 0 ?
-                    0 : DataViewObjects.getValue(objects,
-                        questTextProperties.textSettings.skewY, textSetting.skewY);
+                    questTextProperties.textSettings.skewY, textSetting.skewY);
             return textSetting;
         }
 
