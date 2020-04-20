@@ -43,7 +43,7 @@ module powerbi.extensibility.visual {
                 return defaultValue;
             }
             const objectOrMap: DataViewObject = objects[propertyId.objectName];
-            const object: DataViewObject = objectOrMap as DataViewObject;
+            const object: DataViewObject = <DataViewObject>objectOrMap;
             return DataViewObject.getValue(object, propertyId.propertyName, defaultValue);
         }
 
@@ -71,7 +71,7 @@ module powerbi.extensibility.visual {
          */
         export function getUserDefinedObjects(objects: DataViewObjects, objectName: string): DataViewObjectMap {
             if (objects && objects[objectName]) {
-                return objects[objectName] as DataViewObjectMap;
+                return <DataViewObjectMap>objects[objectName];
             }
         }
 
@@ -105,7 +105,7 @@ module powerbi.extensibility.visual {
             if (!object) {
                 return defaultValue;
             }
-            const propertyValue: T = object[propertyName] as T;
+            const propertyValue: T = <T>object[propertyName];
             if (propertyValue === undefined) {
                 return defaultValue;
             }
@@ -248,95 +248,59 @@ module powerbi.extensibility.visual {
 
     questTextProperties = {
         dynamicSettings: {
-            backgroundColor: {
-                objectName: "Settings",
-                propertyName: "backgroundColor" } as DataViewObjectPropertyIdentifier,
-            boldStyle: { objectName: "Settings", propertyName: "boldStyle" } as DataViewObjectPropertyIdentifier,
-            fontFamily: { objectName: "Settings", propertyName: "fontFamily" } as DataViewObjectPropertyIdentifier,
-            fontWeight: { objectName: "Settings", propertyName: "fontWeight" } as DataViewObjectPropertyIdentifier,
-            italicStyle: { objectName: "Settings", propertyName: "italicStyle" } as DataViewObjectPropertyIdentifier,
-            overline: { objectName: "Settings", propertyName: "overline" } as DataViewObjectPropertyIdentifier,
-            strikeThrough: {
-                objectName: "Settings",
-                propertyName: "strikeThrough" } as DataViewObjectPropertyIdentifier,
-            textDecoration: {
-                objectName: "Settings",
-                propertyName: "textDecoration" } as DataViewObjectPropertyIdentifier,
-            textShadow: { objectName: "Settings", propertyName: "textShadow" } as DataViewObjectPropertyIdentifier,
-            textShadowBlur: {
-                objectName: "Settings",
-                propertyName: "textShadowBlur" } as DataViewObjectPropertyIdentifier,
-            textShadowColor: {
-                objectName: "Settings",
-                propertyName: "textShadowColor" } as DataViewObjectPropertyIdentifier,
-            textTransform: {
-                objectName: "Settings",
-                propertyName: "textTransform" } as DataViewObjectPropertyIdentifier,
-            transparency: { objectName: "Settings", propertyName: "transparency" } as DataViewObjectPropertyIdentifier,
-            underline: {
-                objectName: "Settings",
-                propertyName: "underline" } as DataViewObjectPropertyIdentifier },
+            backgroundColor: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "backgroundColor" },
+            boldStyle: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "boldStyle" },
+            fontFamily: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "fontFamily" },
+            fontWeight: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "fontWeight" },
+            italicStyle: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "italicStyle" },
+            overline: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "overline" },
+            strikeThrough: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "strikeThrough" },
+            textDecoration: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "textDecoration" },
+            textShadow: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "textShadow" },
+            textShadowBlur: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "textShadowBlur" },
+            textShadowColor: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "textShadowColor" },
+            textTransform: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "textTransform" },
+            transparency: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "transparency" },
+            underline: <DataViewObjectPropertyIdentifier>{ objectName: "Settings", propertyName: "underline" }
+        },
 
         staticTextSettings: {
-            backgroundColor: {
-                objectName: "staticText",
-                propertyName: "backgroundColor" } as DataViewObjectPropertyIdentifier,
-            boldStyle: { objectName: "staticText", propertyName: "boldStyle" } as DataViewObjectPropertyIdentifier,
-            fontFamily: { objectName: "staticText", propertyName: "fontFamily" } as DataViewObjectPropertyIdentifier,
-            fontWeight: { objectName: "staticText", propertyName: "fontWeight" } as DataViewObjectPropertyIdentifier,
-            italicStyle: { objectName: "staticText", propertyName: "italicStyle" } as DataViewObjectPropertyIdentifier,
-            overline: { objectName: "staticText", propertyName: "overline" } as DataViewObjectPropertyIdentifier,
-            postText: { objectName: "staticText", propertyName: "postText" } as DataViewObjectPropertyIdentifier,
-            showColon: { objectName: "staticText", propertyName: "showColon" } as DataViewObjectPropertyIdentifier,
-            strikeThrough: {
-                objectName: "staticText",
-                propertyName: "strikeThrough" } as DataViewObjectPropertyIdentifier,
-            textDecoration: {
-                objectName: "staticText",
-                propertyName: "textDecoration" } as DataViewObjectPropertyIdentifier,
-            textPosition: {
-                objectName: "staticText",
-                propertyName: "textPosition" } as DataViewObjectPropertyIdentifier,
-            textShadow: { objectName: "staticText", propertyName: "textShadow" } as DataViewObjectPropertyIdentifier,
-            textShadowBlur: {
-                objectName: "staticText",
-                propertyName: "textShadowBlur" } as DataViewObjectPropertyIdentifier,
-            textShadowColor: {
-                objectName: "staticText",
-                propertyName: "textShadowColor" } as DataViewObjectPropertyIdentifier,
-            textTransform: {
-                objectName: "staticText",
-                propertyName: "textTransform" } as DataViewObjectPropertyIdentifier,
-            transparency: {
-                objectName: "staticText",
-                propertyName: "transparency" } as DataViewObjectPropertyIdentifier,
-            underline: { objectName: "staticText", propertyName: "underline" } as DataViewObjectPropertyIdentifier },
+            backgroundColor: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "backgroundColor" },
+            boldStyle: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "boldStyle" },
+            fontFamily: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "fontFamily" },
+            fontWeight: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "fontWeight" },
+            italicStyle: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "italicStyle" },
+            overline: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "overline" },
+            postText: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "postText" },
+            showColon: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "showColon" },
+            strikeThrough: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "strikeThrough" },
+            textDecoration: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "textDecoration" },
+            textPosition: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "textPosition" },
+            textShadow: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "textShadow" },
+            textShadowBlur: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "textShadowBlur" },
+            textShadowColor: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "textShadowColor" },
+            textTransform: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "textTransform" },
+            transparency: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "transparency" },
+            underline: <DataViewObjectPropertyIdentifier>{ objectName: "staticText", propertyName: "underline" }
+        },
         textSettings: {
-            alignment: { objectName: "textSettings", propertyName: "alignment" } as DataViewObjectPropertyIdentifier,
-            alignmentV: { objectName: "textSettings", propertyName: "alignmentV" } as DataViewObjectPropertyIdentifier,
-            color: { objectName: "textSettings", propertyName: "color" } as DataViewObjectPropertyIdentifier,
-            direction: { objectName: "textSettings", propertyName: "direction" } as DataViewObjectPropertyIdentifier,
-            fontSize: { objectName: "textSettings", propertyName: "fontSize" } as DataViewObjectPropertyIdentifier,
-            letterSpacing: {
-                objectName: "textSettings", propertyName: "letterSpacing" } as DataViewObjectPropertyIdentifier,
-            lineHeight: { objectName: "textSettings", propertyName: "lineHeight" } as DataViewObjectPropertyIdentifier,
-            lineIndent: { objectName: "textSettings", propertyName: "lineIndent" } as DataViewObjectPropertyIdentifier,
-            perspective: {
-                objectName: "textSettings",
-                propertyName: "perspective" } as DataViewObjectPropertyIdentifier,
-            postText: { objectName: "textSettings", propertyName: "postText" } as DataViewObjectPropertyIdentifier,
-            skewX: { objectName: "textSettings", propertyName: "skewX" } as DataViewObjectPropertyIdentifier,
-            skewY: { objectName: "textSettings", propertyName: "skewY" } as DataViewObjectPropertyIdentifier,
-            textIndent: { objectName: "textSettings", propertyName: "textIndent" } as DataViewObjectPropertyIdentifier,
-            textRotate: {
-                objectName: "textSettings",
-                propertyName: "textRotate" } as DataViewObjectPropertyIdentifier,
-            transparency: {
-                objectName: "textSettings",
-                propertyName: "transparency" } as DataViewObjectPropertyIdentifier,
-            wordSpacing: {
-                objectName: "textSettings",
-                propertyName: "wordSpacing" } as DataViewObjectPropertyIdentifier },
+            alignment: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "alignment" },
+            alignmentV: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "alignmentV" },
+            color: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "color" },
+            direction: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "direction" },
+            fontSize: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "fontSize" },
+            letterSpacing: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "letterSpacing" },
+            lineHeight: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "lineHeight" },
+            lineIndent: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "lineIndent" },
+            perspective: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "perspective" },
+            postText: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "postText" },
+            skewX: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "skewX" },
+            skewY: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "skewY" },
+            textIndent: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "textIndent" },
+            textRotate: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "textRotate" },
+            transparency: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "transparency" },
+            wordSpacing: <DataViewObjectPropertyIdentifier>{ objectName: "textSettings", propertyName: "wordSpacing" }
+        },
     };
 
     export class TextEnhancer implements IVisual {
@@ -1159,10 +1123,8 @@ module powerbi.extensibility.visual {
                 const lHeight: number = textSettings.lineHeight;
                 const indent: number = textSettings.textIndent;
                 let textRotationVal: number = textSettings.textRotate === null ? 0 : textSettings.textRotate;
-                const textSkewX: number = textSettings.skewX;
-                const textSkewY: number = textSettings.skewY;
-                let textValStatic: string = "";
-                let textValDynamic: string = "";
+                const textSkewX: number = textSettings.skewX, textSkewY: number = textSettings.skewY;
+                let textValStatic: string = "", textValDynamic: string = "";
                 valueLength = valuesContainer.lengthContainer;
                 if (valueLength === 1) { // Text Formatting
                     this.target.append("div")
@@ -1172,8 +1134,7 @@ module powerbi.extensibility.visual {
                         .style("word-spacing", this.getWordSpace(wordSpace))
                         .style("line-height", this.getLineHeight(lHeight))
                         .style("text-indent", this.getIndent(indent))
-                        .style("color", textSettings.color +
-                            this.getOpacityHex(textSettings.transparency == null ? 0 : textSettings.transparency))
+                        .style("color", textSettings.color + this.getOpacityHex(textSettings.transparency == null ? 0 : textSettings.transparency))
                         .style("transform", this.getSkewString(textSkewX, textSkewY)).style("width", "fit-content");
                     textValStatic = textValStaticInput;
                     textValDynamic = textValDynamicInput;
@@ -1200,7 +1161,7 @@ module powerbi.extensibility.visual {
                     this.categoriesValues = options.dataViews[0].categorical.categories;
                 }
                 if (categoricalValues.values !== undefined) {
-                    this.categoriesValues = this.categoriesValues.concat(categoricalValues.values as any);
+                    this.categoriesValues = this.categoriesValues.concat(<any>categoricalValues.values);
                 }
                 if (dataView.categorical.categories !== undefined) { // To check if url field exists
                     for (const iterator of this.categoriesValues) {
@@ -1210,15 +1171,12 @@ module powerbi.extensibility.visual {
                     }
                 } else {
                     if (dataView.categorical.values[0].source.roles.URL) {
-                        if (dataView.categorical.values[0].source.type[`category`]
-                            === "WebUrl") {
+                        if (dataView.categorical.values[0].source.type[`category`] === "WebUrl") {
                             url = (dataView.categorical.values[0].values.toString());
                         }
                     }
                 }// Text Direction
-
-                let textAlign: string = textSettings.alignment;
-                let writingMode: string = textSettings.direction;
+                let textAlign: string = textSettings.alignment, writingMode: string = textSettings.direction;
                 switch (textSettings.direction) {
                     case "vertical-lr":
                         textRotationVal = this.degree180 + textRotationVal; writingMode = "tb-rl";
@@ -1735,8 +1693,7 @@ module powerbi.extensibility.visual {
             const upper = 100;
             if (textRotationVal !== 0) {
                 const textWidth: number = twFinalText.width();
-                const textWidth2: number = $(".staticText").width() + dynamicText.width() +
-                    $(".dynamicpluscolon").width();
+                const textWidth2: number = $(".staticText").width() + dynamicText.width() + $(".dynamicpluscolon").width();
                 const textHeight: number = twFinalText.height();
                 switch (textSettings.alignmentV) {
                     case "top": {
@@ -1746,12 +1703,10 @@ module powerbi.extensibility.visual {
                                     textRotationVal % this.degree180 :
                                     (-textRotationVal) % this.degree180;
                                 if (textSettings.alignment !== "center") {
-                                    this.finalTextContainer
-                                        .style("margin-top", `${((textWidth / 2)
+                                    this.finalTextContainer.style("margin-top", `${((textWidth / 2)
                                             * Math.sin(this.toRadians(textRotationVal)))}px`);
                                 } else {
-                                    this.finalTextContainer
-                                        .style("margin-top", `${((textWidth2 / 2)
+                                    this.finalTextContainer.style("margin-top", `${((textWidth2 / 2)
                                             * Math.sin(this.toRadians(textRotationVal)))}px`);
                                 }
                             }
@@ -1762,36 +1717,29 @@ module powerbi.extensibility.visual {
                                     (-textRotationVal) % this.degree180;
                                 if (textSettings.alignment !== "center") {
                                     this.finalTextContainer.style("margin-top",
-                                        `${((textWidth / 2) *
-                                            Math.sin(this.toRadians(textRotationVal)))}px`);
+                                        `${((textWidth / 2) * Math.sin(this.toRadians(textRotationVal)))}px`);
                                 } else {
-                                    this.finalTextContainer
-                                        .style("margin-top", `${((textWidth2 / 2)
+                                    this.finalTextContainer.style("margin-top", `${((textWidth2 / 2)
                                             * Math.sin(this.toRadians(textRotationVal)))}px`);
                                 }
                             }
                                                   break;
                             case "vertical-rl": {
                                 let buffer: number = 0;
-                                let rotVal: number
-                                    = textRotationVal > 0 ? textRotationVal : -textRotationVal;
+                                let rotVal: number = textRotationVal > 0 ? textRotationVal : -textRotationVal;
                                 textRotationVal = textRotationVal > 0 ?
-                                    textRotationVal % this.degree180 :
-                                    (-textRotationVal) % this.degree180;
+                                    textRotationVal % this.degree180 : (-textRotationVal) % this.degree180;
                                 rotVal = rotVal % this.degree360;
                                 if (rotVal < this.degree180) {
                                     buffer = (rotVal / upper * 2) * textSettings.fontSize;
                                 } else {
-                                    buffer = ((this.degree360 - rotVal) / upper * 2)
-                                        * textSettings.fontSize;
+                                    buffer = ((this.degree360 - rotVal) / upper * 2) * textSettings.fontSize;
                                 }
                                 if (textSettings.alignment === "left") {
-                                    this.finalTextContainer
-                                        .style("margin-left", `${((textHeight / 2)
+                                    this.finalTextContainer.style("margin-left", `${((textHeight / 2)
                                             * Math.sin(this.toRadians(textRotationVal)))}px`);
                                 } else if (textSettings.alignment === "right") {
-                                    this.finalTextContainer
-                                        .style("margin-left", `${-((textHeight / 2) *
+                                    this.finalTextContainer.style("margin-left", `${-((textHeight / 2) *
                                             Math.sin(this.toRadians(textRotationVal)) + buffer)}px`);
                                 }
                             }
@@ -2117,27 +2065,19 @@ module powerbi.extensibility.visual {
         public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions):
             VisualObjectInstanceEnumeration {
             const textSetting: ITextSettings = this.getTextSettings(this.dataViews);
-            const objectName: string = options.objectName;
-            const objectEnumeration: VisualObjectInstance[] = [];
+            const objectName: string = options.objectName, objectEnumeration: VisualObjectInstance[] = [];
             switch (objectName) {
                 case "textSettings":
                     objectEnumeration.push({
                         objectName,
                         properties: {
-                            alignment: textSetting.alignment,
-                            alignmentV: textSetting.alignmentV,
-                            color: textSetting.color,
-                            direction: textSetting.direction,
-                            fontSize: textSetting.fontSize,
-                            letterSpacing: textSetting.letterSpacing,
-                            lineHeight: textSetting.lineHeight,
-                            lineIndent: textSetting.lineIndent,
-                            perspective: textSetting.perspective,
-                            skewX: textSetting.skewX,
-                            skewY: textSetting.skewY,
-                            textIndent: textSetting.textIndent,
-                            textRotate: textSetting.textRotate,
-                            transparency: textSetting.transparency,
+                            alignment: textSetting.alignment, alignmentV: textSetting.alignmentV,
+                            color: textSetting.color, direction: textSetting.direction,
+                            fontSize: textSetting.fontSize, letterSpacing: textSetting.letterSpacing,
+                            lineHeight: textSetting.lineHeight, lineIndent: textSetting.lineIndent,
+                            perspective: textSetting.perspective, skewX: textSetting.skewX,
+                            skewY: textSetting.skewY, textIndent: textSetting.textIndent,
+                            textRotate: textSetting.textRotate, transparency: textSetting.transparency,
                             wordSpacing: textSetting.wordSpacing,
                         },
                         selector: null,
@@ -2192,16 +2132,12 @@ module powerbi.extensibility.visual {
                         objectEnumeration.push({
                             objectName,
                             properties: {
-                                backgroundColor: this.dynamicSettings.backgroundColor,
-                                boldStyle: this.dynamicSettings.boldStyle,
-                                fontFamily: this.dynamicSettings.fontFamily,
-                                italicStyle: this.dynamicSettings.italicStyle,
-                                overline: this.dynamicSettings.overline,
-                                strikeThrough: this.dynamicSettings.strikeThrough,
-                                textShadow: this.dynamicSettings.textShadow,
-                                textTransform: this.dynamicSettings.textTransform,
-                                transparency: this.dynamicSettings.transparency,
-                                underline: this.dynamicSettings.underline },
+                                backgroundColor: this.dynamicSettings.backgroundColor, boldStyle: this.dynamicSettings.boldStyle,
+                                fontFamily: this.dynamicSettings.fontFamily, italicStyle: this.dynamicSettings.italicStyle,
+                                overline: this.dynamicSettings.overline, strikeThrough: this.dynamicSettings.strikeThrough,
+                                textShadow: this.dynamicSettings.textShadow, textTransform: this.dynamicSettings.textTransform,
+                                transparency: this.dynamicSettings.transparency, underline: this.dynamicSettings.underline 
+                            },
                             selector: null });
                     } else {
                         objectEnumeration.push({
@@ -2224,7 +2160,6 @@ module powerbi.extensibility.visual {
                     break;
                 default: break;
             }
-
             return objectEnumeration;
         }
 
