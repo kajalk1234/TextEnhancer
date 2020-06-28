@@ -8,7 +8,7 @@
     "@types/jquery": "^3.3.29",
     "d3": "^3.5.5",
     "d3-selection": "^1.0.2",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "lodash": "^4.17.14",
     "powerbi-visuals-utils-dataviewutils": "^1.5.0",
     "powerbi-visuals-utils-formattingutils": "^3.1.0",
