@@ -992,25 +992,27 @@ module powerbi.extensibility.visual {
             }
             // Below Two lines are to handle height issue of div in edge
             const dataView: DataView = this.dataViews = options.dataViews[0];
+            const categorydata = dataView.categorical;
             const spanHeight: number = dynamicText.height();
             $(".tw_value.tw_finalText").height(spanHeight + 2);
-            for (const jIterator of this.categoriesValues) {
-                if (jIterator.source.type[`category`] === "WebUrl" && jIterator.source.roles.URL) {
-                    dynamicText.on("click", (): void => {
-                        this.visualHost.launchUrl(url);
-                    });
-                }
-            }
-            if (dataView.categorical.categories !== undefined) {
-                for (const iterator of this.categoriesValues) {
-                    if (iterator.source.type[`category`]
-                        === "WebUrl" && iterator.source.roles.URL) {
+            if(categorydata.categories !== undefined)
+            {
+                for (const jIterator of this.categoriesValues) {
+                    if (jIterator.source.type[`category`] === "WebUrl" && jIterator.source.roles.URL) {
+                        dynamicText.on("click", (): void => {
+                            this.visualHost.launchUrl(url);
+                        });
                         dynamicText.addClass("urlIcon");
                     }
                 }
-            } else {
-                if (dataView.categorical.values[0].source.roles.URL) {
-                    if (dataView.categorical.values[0].source.type[`category`] === "WebUrl") {
+            }
+            if(categorydata.values !== undefined)
+            {
+                for (const jIterator of categorydata.values) {
+                    if (jIterator.source.type[`category`] === "WebUrl" && jIterator.source.roles.URL) {
+                        dynamicText.on("click", (): void => {
+                            this.visualHost.launchUrl(url);
+                        });
                         dynamicText.addClass("urlIcon");
                     }
                 }
@@ -1160,22 +1162,21 @@ module powerbi.extensibility.visual {
                 if (categoricalValues.categories !== undefined) {
                     this.categoriesValues = options.dataViews[0].categorical.categories;
                 }
-                if (categoricalValues.values !== undefined) {
-                    this.categoriesValues = this.categoriesValues.concat(<any>categoricalValues.values);
-                }
                 if (dataView.categorical.categories !== undefined) { // To check if url field exists
                     for (const iterator of this.categoriesValues) {
                         if (iterator.source.type[`category`] === "WebUrl" && iterator.source.roles.URL) {
                             url = (iterator.values.toString());
                         }
                     }
-                } else {
-                    if (dataView.categorical.values[0].source.roles.URL) {
-                        if (dataView.categorical.values[0].source.type[`category`] === "WebUrl") {
-                            url = (dataView.categorical.values[0].values.toString());
+                } 
+                if (dataView.categorical.values !== undefined) { // To check if url field exists
+                    for (const iterator of dataView.categorical.values) {
+                        if (iterator.source.type[`category`] === "WebUrl" && iterator.source.roles.URL) {
+                            url = (iterator.values.toString());
                         }
                     }
-                }// Text Direction
+                } 
+                // Text Direction
                 let textAlign: string = textSettings.alignment, writingMode: string = textSettings.direction;
                 switch (textSettings.direction) {
                     case "vertical-lr":
