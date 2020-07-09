@@ -484,9 +484,9 @@ module powerbi.extensibility.visual {
 
         /**
          * Method that counts Decimal places
-         * @param {number} value         - variable to store the number of decimal places
+         * @param {any} value         - variable to store the number of decimal places
          */
-        public getDecimalPlacesCount(value: number): number {
+        public getDecimalPlacesCount(value: any): number {
             let decimalPlaces: number = 0;
             if (value > 0) {
                 const arr: string[] = value.toString().split(".");
@@ -503,14 +503,14 @@ module powerbi.extensibility.visual {
          *                                      all data needed to render the visual.
          */
         public getDynamicTextValue(dataView: DataView): IDynamicTextContainer {
-            let textValDynamicInput: string;
+            let textValDynamicInput: any;
             let valueLength: number = 0;
             const categorical = dataView.categorical;
             if (dataView && categorical) {
                 if (categorical.categories && categorical.categories[0] &&
                     categorical.categories[0].values) {
                     valueLength = categorical.categories[0].values.length;
-                    textValDynamicInput = (valueLength ? categorical.categories[0].values[0] : "(Blank)").toString();
+                    textValDynamicInput = valueLength ? categorical.categories[0].values[0] : "(blank)";
                     if (categorical.categories[0].source && categorical.categories[0].source.format) {
                         const formatter: utils.formatting.IValueFormatter = valueFormatter.create({
                             format: categorical.categories[0].source.format });
@@ -519,12 +519,12 @@ module powerbi.extensibility.visual {
                 } else if (categorical.values && categorical.values[0] &&
                     categorical.values[0].values) {
                     valueLength = categorical.values[0].values.length;
-                    textValDynamicInput = (categorical.values[0].values[0] ?
-                        categorical.values[0].values[0] : 0).toString();
+                    textValDynamicInput = categorical.values[0].values[0] ?	
+                        categorical.values[0].values[0] : 0;
                     const upper = 4;
                     if (categorical.values[0] && categorical.values[0].source
                         && categorical.values[0].source.format) {
-                        let decimalPlaces: number = this.getDecimalPlacesCount(parseInt(textValDynamicInput, 10));
+                        let decimalPlaces: number = this.getDecimalPlacesCount(textValDynamicInput);
                         decimalPlaces = decimalPlaces > upper ? upper : decimalPlaces;
                         const formatter: utils.formatting.IValueFormatter = valueFormatter.create({
                             format: categorical.values[0].source.format, precision: decimalPlaces, value: 1 });
@@ -963,7 +963,7 @@ module powerbi.extensibility.visual {
         public handleHeightIssue(
             options: VisualUpdateOptions,
             dynamicText: JQuery<HTMLElement>,
-            url: string,
+            url: any,
             valueLength: number,
             textSettings: ITextSettings): void {
             const upper = 100;
